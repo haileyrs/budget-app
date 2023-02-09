@@ -3,7 +3,12 @@ import BudgetWidget from '@/components/budget/budgetWidget';
 import InternalNavBar from '@/components/nav/internalNav';
 import Head from 'next/head';
 
+
+
 export default function Budgets() {
+
+  const budgets = fetch('/api/budgets');
+  
   return (
     <>
       <Head>

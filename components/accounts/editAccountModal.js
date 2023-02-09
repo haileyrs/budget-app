@@ -27,7 +27,8 @@ export default function EditAccount({ name, amount, plaid }) {
             />
           </div>
         </div>
-        <div className="modal-action m-0">
+        <div className="modal-action m-1">
+          <label className="btn btn-error">Delete</label>
           <label className="btn">Save</label>
         </div>
       </Modal>

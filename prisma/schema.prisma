@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./money.db"
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  username    String    @unique
+  password    String
+  displayName String?
+  Budget      Budget[]
+  Account     Account[]
+}
+
+model Budget {
+  id         Int      @id @default(autoincrement())
+  category   Category @relation(fields: [categoryId], references: [id])
+  max        Float
+  value      Float
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  categoryId Int
+}
+
+model Account {
+  id          Int           @id @default(autoincrement())
+  name        String
+  type        String
+  value       Float
+  lastUpdated String
+  user        User          @relation(fields: [userId], references: [id])
+  userId      Int
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id         Int      @id @default(autoincrement())
+  name       String
+  account    Account  @relation(fields: [accountId], references: [id])
+  vendor     String
+  amount     Float
+  category   Category @relation(fields: [categoryId], references: [id])
+  accountId  Int
+  categoryId Int
+}
+
+model Category {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  Budget      Budget[]
+  Transaction Transaction[]
+}

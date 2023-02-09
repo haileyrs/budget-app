@@ -4,6 +4,18 @@ import Link from 'next/link';
 import Head from 'next/head';
 
 export default function Summary() {
+
+  async function getUser() {
+    try {
+      await fetch(`/api/user`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <Head>
@@ -42,7 +54,9 @@ export default function Summary() {
                 <h2 className="card-title">Card title!</h2>
                 <p>Largest Spend Category</p>
                 <div className="card-actions justify-end">
-                  <button className="btn btn-primary">Buy Now</button>
+                  <button className="btn btn-primary" onClick={() => getUser()}>
+                    Buy Now
+                  </button>
                 </div>
               </div>
             </div>

@@ -12,7 +12,7 @@ export default function AccountWidget({ name, value, updatedDate, plaid }) {
           </div>
         </div>
       </label>
-      <EditAccount name={name} value={value} plaid={plaid}/>
+      <EditAccount key={name} name={name} value={value} plaid={plaid}/>
     </>
   );
 }

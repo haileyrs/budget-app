@@ -5,6 +5,23 @@ import PlaidAddAccount from '@/components/accounts/plaidModal';
 import Head from 'next/head';
 
 export default function Accounts() {
+  const getAccounts = async () => {
+    try {
+      const res = await fetch(`/api/account`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await res.json();
+      console.log(data);
+      return data
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  let accounts = [{"id":1,"name":"US Bank","type":"Checking","value":5487.24,"lastUpdated":"01/02/2023","userId":1},{"id":2,"name":"US Bank","type":"Checking","value":5487.24,"lastUpdated":"01/02/2023","userId":1},{"id":3,"name":"US Bank","type":"Checking","value":5487.24,"lastUpdated":"01/02/2023","userId":1}]
+  
+
   return (
     <>
       <Head>
@@ -56,6 +73,7 @@ export default function Accounts() {
             <p className="italic font-semibold text-primary">
               Click on an account card to update it.
             </p>
+            <button className="btn" onClick={getAccounts}>Pull accounts</button>
           </div>
 
           {/* for account in list of accounts */}
@@ -65,6 +83,9 @@ export default function Accounts() {
           </article> */}
           <div className="account-group">
             <div className="divider">Checking & Savings</div>
+            {accounts.map(account => (
+              <AccountWidget key={account.id} name={account.name} value={account.value} updatedDate={account.updatedDate} />
+            ))}
             <AccountWidget
               name="US Bank Checking"
               value="36,000"

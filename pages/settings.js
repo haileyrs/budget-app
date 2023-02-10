@@ -9,8 +9,10 @@ export default function Settings() {
       </Head>
       <InternalNavBar>
         <main>
-          <div>
-            <h1>Settings</h1>
+          <div className="flex flex-row" id="title-div">
+            <article className="prose">
+              <h1>Settings</h1>
+            </article>
           </div>
         </main>
       </InternalNavBar>

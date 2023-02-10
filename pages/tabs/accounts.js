@@ -3,24 +3,43 @@ import AccountWidget from '@/components/accounts/accountWidget';
 import AddAccount from '@/components/accounts/addAccountModal';
 import PlaidAddAccount from '@/components/accounts/plaidModal';
 import Head from 'next/head';
+import prisma from '@/lib/prisma';
 
-export default function Accounts() {
-  const getAccounts = async () => {
-    try {
-      const res = await fetch(`/api/account`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const data = await res.json();
-      console.log(data);
-      return data
-      
-    } catch (error) {
-      console.log(error);
+export async function getServerSideProps() {
+  // try {
+  //   const res = await fetch(`/api/account`, {
+  //     method: 'GET',
+  //     headers: { 'Content-Type': 'application/json' },
+  //   });
+  //   const data = await res.json();
+  //   console.log(data);
+  //   return {props: { data }}
+
+  // } catch (error) {
+  //   console.log(error);
+  // }
+  const accounts = await prisma.account.findMany({
+    where: {
+      userId: 1
+    }
+  });
+  console.log(accounts);
+  return {
+    props: {
+      accounts
     }
   };
-  let accounts = [{"id":1,"name":"US Bank","type":"Checking","value":5487.24,"lastUpdated":"01/02/2023","userId":1},{"id":2,"name":"US Bank","type":"Checking","value":5487.24,"lastUpdated":"01/02/2023","userId":1},{"id":3,"name":"US Bank","type":"Checking","value":5487.24,"lastUpdated":"01/02/2023","userId":1}]
-  
+}
+
+export default function Accounts({ accounts }) {
+  const checkingSavings = accounts.filter(
+    (a) => a.type == 'Checking' || a.type == 'Savings'
+  );
+  const investments = accounts.filter(
+    (a) => a.type == 'Investment' || a.type == 'Retirement'
+  );
+  const property = accounts.filter((a) => a.type == 'Property');
+  const credit = accounts.filter((a) => a.type == 'Credit');
 
   return (
     <>
@@ -73,58 +92,65 @@ export default function Accounts() {
             <p className="italic font-semibold text-primary">
               Click on an account card to update it.
             </p>
-            <button className="btn" onClick={getAccounts}>Pull accounts</button>
           </div>
 
-          {/* for account in list of accounts */}
-          {/* could possibly split into categories */}
           {/* <article className='prose pl-3'>
             <h2>Checking & Savings</h2>
           </article> */}
           <div className="account-group">
             <div className="divider">Checking & Savings</div>
-            {accounts.map(account => (
-              <AccountWidget key={account.id} name={account.name} value={account.value} updatedDate={account.updatedDate} />
+            {checkingSavings.map((account) => (
+              <AccountWidget
+                key={account.id}
+                id={account.id}
+                type={account.type}
+                name={account.name}
+                amount={account.value}
+                updatedDate={account.lastUpdated}
+              />
             ))}
-            <AccountWidget
-              name="US Bank Checking"
-              value="36,000"
-              updatedDate="1/23/2023"
-            />
-            <AccountWidget
-              name="SOFI Savings"
-              value="452,000"
-              updatedDate="1/28/2023"
-            />
           </div>
           <div className="account-group">
             <div className="divider">Investments</div>
-            <AccountWidget
-              name="Fidelity Retirement"
-              value="14,000"
-              updatedDate="2/6/2023"
-            />
-            <AccountWidget
-              name="SOFI Robo Invest"
-              value="10,548"
-              updatedDate="2/5/2023"
-            />
-            <AccountWidget
-              name="SOFI Self Managed Invest"
-              value="12,458"
-              updatedDate="2/5/2023"
-            />
+            {investments.map((account) => (
+              <AccountWidget
+                key={account.id}
+                id={account.id}
+                type={account.type}
+                name={account.name}
+                amount={account.value}
+                updatedDate={account.lastUpdated}
+              />
+            ))}
           </div>
           <div className="account-group">
             <div className="divider">Property</div>
-            <AccountWidget
-              name="2009 Toyota Camry"
-              value="5,784"
-              updatedDate="1/6/2023"
-            />
+            {property.map((account) => (
+              <AccountWidget
+                key={account.id}
+                id={account.id}
+                type={account.type}
+                name={account.name}
+                amount={account.value}
+                updatedDate={account.lastUpdated}
+              />
+            ))}
+          </div>
+          <div className="account-group">
+            <div className="divider">Credit</div>
+            {credit.map((account) => (
+              <AccountWidget
+                key={account.id}
+                id={account.id}
+                type={account.type}
+                name={account.name}
+                amount={account.value}
+                updatedDate={account.lastUpdated}
+              />
+            ))}
           </div>
           <AddAccount />
-          <PlaidAddAccount/>
+          <PlaidAddAccount />
         </main>
       </InternalNavBar>
     </>

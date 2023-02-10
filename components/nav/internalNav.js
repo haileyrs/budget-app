@@ -1,8 +1,19 @@
-import ProfileModal from "../user/profileModal"
-import LogoutModal from "../user/logoutModal"
+import ProfileModal from '../user/profileModal';
+import LogoutModal from '../user/logoutModal';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function InternalNavBar({ children }) {
+  const router = useRouter();
+
+  const activeClass = (path) => {
+    let activeC = '';
+    router.pathname == path
+      ? (activeC = 'bg-primary')
+      : (activeC = 'text-neutral-content');
+    return activeC;
+  };
+
   return (
     <>
       <div className="drawer drawer-mobile">
@@ -30,7 +41,9 @@ export default function InternalNavBar({ children }) {
               </label>
             </div>
             <div className="flex-1">
-              <a className="btn btn-ghost normal-case text-xl">Bad Title</a>
+              <button className="btn btn-ghost normal-case text-xl">
+                <Link href="/tabs/summary">Bad Title</Link>
+              </button>
             </div>
             {/* theme switch */}
             <div className="dropdown dropdown-end">
@@ -77,20 +90,45 @@ export default function InternalNavBar({ children }) {
         <div className="drawer-side">
           <label htmlFor="my-drawer" className="drawer-overlay"></label>
           <ul className="menu p-4 w-80 bg-base-100 text-base-content bg-neutral">
-            <li className="text-neutral-content">
-              <Link href="/tabs/summary/">Summary</Link>
+            <li>
+              <Link
+                className={activeClass('/tabs/summary')}
+                href="/tabs/summary/"
+              >
+                Summary
+              </Link>
             </li>
-            <li className="text-neutral-content">
-              <Link href="/tabs/budgets/">Budgets</Link>
+            <li>
+              <Link
+                className={activeClass('/tabs/budgets')}
+                href="/tabs/budgets/"
+              >
+                Budgets
+              </Link>
             </li>
-            <li className="text-neutral-content">
-              <Link href="/tabs/transactions/">Transactions</Link>
+            <li>
+              <Link
+                className={activeClass('/tabs/transactions')}
+                href="/tabs/transactions/"
+              >
+                Transactions
+              </Link>
             </li>
-            <li className="text-neutral-content">
-              <Link href="/tabs/accounts/">Accounts</Link>
+            <li>
+              <Link
+                className={activeClass('/tabs/accounts')}
+                href="/tabs/accounts/"
+              >
+                Accounts
+              </Link>
             </li>
-            <li className="text-neutral-content">
-              <Link href="/tabs/export/">Export</Link>
+            <li>
+              <Link
+                className={activeClass('/tabs/export')}
+                href="/tabs/export/"
+              >
+                Export
+              </Link>
             </li>
           </ul>
         </div>

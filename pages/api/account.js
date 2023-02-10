@@ -51,11 +51,10 @@ export default async function handler(req, res) {
 
   if (req.method == 'PUT') {
     // add unique last updated function
-    const accountId = req.id;
-    const { name, type, value } = req.body;
+    const { id, name, type, value } = req.body;
     const updateaccount = await prisma.account.update({
       where: {
-        id: accountId
+        id: id
       },
       data: {
         name: name,

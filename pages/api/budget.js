@@ -4,38 +4,44 @@ import prisma from '@/lib/prisma';
 // add method to find all budgets for user
 export default async function handler(req, res) {
   if (req.method == 'GET') {
-    const { userId, category } = req.body;
+    // const { userId, category } = req.body;
     let budgets = {};
-    if (category) {
-      budgets = await prisma.budget.findUnique({
-        where: {
-          AND: [
-            {
-              userId: userId
-            },
-            {
-              categoryId: category
-            }
-          ]
-        }
-      });
-    } else {
-      budgets = await prisma.budget.findMany({
-        where: {
-          userId: userId
-        }
-      });
-    }
+    // if (category) {
+    //   budgets = await prisma.budget.findUnique({
+    //     where: {
+    //       AND: [
+    //         {
+    //           userId: userId
+    //         },
+    //         {
+    //           categoryId: category
+    //         }
+    //       ]
+    //     }
+    //   });
+    // } else {
+    //   budgets = await prisma.budget.findMany({
+    //     where: {
+    //       userId: userId
+    //     }
+    //   });
+    // }
+    budgets = await prisma.budget.findMany({
+      where: {
+        userId: 1
+      }
+    })
     res.status(200).json(budgets);
   }
 
   if (req.method == 'POST') {
-    const { userId, categoryId, max } = req.body;
+    const { userId, category, max } = req.body;
     // do value math on this side by checking transactions
+    // plaid supplies transaction categories so this structure will probably change
     const result = await prisma.budget.create({
       data: {
         userId: userId,
-        categoryId: categoryId,
+        category: category,
         max: max,
         value: 0
       }
@@ -44,11 +50,10 @@ export default async function handler(req, res) {
   }
 
   if (req.method == 'PUT') {
-    const budgetId = req.id;
-    const max = req.body;
+    const { id, max } = req.body;
     const updateBudget = await prisma.budget.update({
       where: {
-        id: budgetId
+        id: id
       },
       data: {
         max: max

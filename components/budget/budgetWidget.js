@@ -1,7 +1,7 @@
 import EditBudget from './editBudgetModal';
 import styles from './budget.module.css';
 
-export default function BudgetWidget({ name, value, max }) {
+export default function BudgetWidget({ id, name, value, max }) {
   const remaining = max - value;
   return (
     <>
@@ -31,12 +31,12 @@ export default function BudgetWidget({ name, value, max }) {
               <p>${remaining} Left </p>
             </div>
             <div className='flex'>
-              <label htmlFor="edit-budget-modal" className="btn btn-sm btn-primary">Edit</label>
+              <label htmlFor={id} className="btn btn-sm btn-primary">Edit</label>
             </div>
           </div>
         </div>
       </div>
-      <EditBudget key={name} name={name} amount={max}/>
+      <EditBudget key={id} id={id} name={name} amount={max}/>
     </>
   );
 }

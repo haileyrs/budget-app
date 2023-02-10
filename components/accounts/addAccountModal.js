@@ -2,39 +2,47 @@ import Modal from "../modalTemplate";
 import styles from "./account.module.css";
 
 export default function AddAccount() {
-  async function postAccount() {
-    const userId = 1;
-    const name = 'US Bank';
-    const type = 'Checking';
-    const value = 5487.24;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const body = { userId, name, type, value };
-      await fetch(`/api/account`, {
+      const data = {
+        userId: 1,
+        name: event.target.name.value,
+        type: event.target.type.value,
+        value: parseFloat(event.target.amount.value)
+      };
+      const response = await fetch(`/api/account`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify(data)
       });
+
+      const result = await response.json();
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
   };
 
+  
   return (
     <>
       <Modal title="Add Account" control="add-account-modal">
-        <form onSubmit={postAccount}>
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
             <div className={styles.inputdiv}>
               <input
                 type="text"
-                name="value"
-                
+                name="name"
+                id="name"
                 placeholder="account name"
                 className="input input-bordered input-primary w-full max-w-xs"
               />
             </div>
             <div className={styles.inputdiv}>
               <select
+                id="type"
+                name="type"
                 className="select select-primary w-full max-w-xs"
                 defaultValue="account type"
               >
@@ -52,15 +60,15 @@ export default function AddAccount() {
             <div className={styles.inputdiv}>
               <input
                 type="text"
-                name="balance"
-                
+                id="amount"
+                name="amount"
                 placeholder="current balance"
                 className="input input-bordered input-primary w-full max-w-xs"
               />
             </div>
           </div>
           <div className="modal-action m-0">
-            <label className="btn">Save</label>
+            <button className="btn" type="submit">Save</button>
           </div>
         </form>
       </Modal>

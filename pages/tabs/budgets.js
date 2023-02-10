@@ -2,13 +2,23 @@ import AddBudget from '@/components/budget/addBudgetModal';
 import BudgetWidget from '@/components/budget/budgetWidget';
 import InternalNavBar from '@/components/nav/internalNav';
 import Head from 'next/head';
+import prisma from '@/lib/prisma';
 
+export async function getServerSideProps() {
+  const budgets = await prisma.budget.findMany({
+    where: {
+      userId: 1
+    }
+  });
+  // console.log(budgets);
+  return {
+    props: {
+      budgets
+    }
+  };
+}
 
-
-export default function Budgets() {
-
-  const budgets = fetch('/api/budgets');
-  
+export default function Budgets({ budgets }) {
   return (
     <>
       <Head>
@@ -44,12 +54,28 @@ export default function Budgets() {
 
           <div className="flex flex-col">
             {/* for budget in list of budgets */}
-            <div className="w-full">
-              <BudgetWidget key="clothing" name="Clothing" value="300" max="500" />
+            {budgets.map((budget) => (
+              <div key={budget.category} className="w-full">
+                <BudgetWidget
+                  key={budget.category}
+                  id={budget.id}
+                  name={budget.category}
+                  value={budget.value}
+                  max={budget.max}
+                />
+              </div>
+            ))}
+            {/* <div className="w-full">
+              <BudgetWidget
+                key="clothing"
+                name="Clothing"
+                value="300"
+                max="500"
+              />
             </div>
             <div className="w-full">
               <BudgetWidget key="dining" name="Dining" value="150" max="300" />
-            </div>
+            </div> */}
           </div>
           <AddBudget />
         </main>

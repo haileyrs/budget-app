@@ -67,7 +67,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method == 'DELETE') {
-    const accountId = req.id;
+    const accountId = req.body;
     const deleteaccount = await prisma.account.delete({
       where: {
         id: accountId

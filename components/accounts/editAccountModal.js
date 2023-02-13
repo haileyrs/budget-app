@@ -1,7 +1,12 @@
 import Modal from '../modalTemplate';
+import ErrorMessage from '../errorMessage';
 import styles from './account.module.css';
+import Router from 'next/router';
 
 export default function EditAccount({ id, name, type, amount, plaid }) {
+  let apiErr = false
+  let errMessage = '';
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
@@ -19,13 +24,30 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
 
       const result = await response.json();
       console.log(result)
+      await Router.push('/tabs/accounts');
     } catch (error) {
       console.log(error);
+      errMessage = 'There was an error updating this account.'
+      apiErr = true;
     }
   };
 
-  const handleDelete = async () => {
-    // bleh
+  const handleDelete = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(`/api/account`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json'},
+        body: id
+      });
+      const result = await response.json();
+      console.log(result);
+      await Router.push('/tabs/accounts');
+    } catch (error) {
+      console.log(error);
+      errMessage = 'There was an error deleting this account.'
+      apiErr = true;
+    }
   };
 
 
@@ -57,9 +79,15 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
               />
             </div>
           </div>
+          {apiErr ? <ErrorMessage message={errMessage} /> : ''}
+
           <div className="modal-action m-1">
-            <button className="btn btn-error">Delete</button>
-            <button className="btn" type="submit">Save</button>
+            <button className="btn btn-error" onClick={handleDelete}>
+              Delete
+            </button>
+            <button className="btn" type="submit">
+              Save
+            </button>
           </div>
         </form>
       </Modal>

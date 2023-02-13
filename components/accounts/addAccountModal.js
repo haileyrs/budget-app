@@ -1,5 +1,6 @@
-import Modal from "../modalTemplate";
-import styles from "./account.module.css";
+import Modal from '../modalTemplate';
+import styles from './account.module.css';
+import Router from 'next/router';
 
 export default function AddAccount() {
   const handleSubmit = async (event) => {
@@ -19,12 +20,12 @@ export default function AddAccount() {
 
       const result = await response.json();
       console.log(result);
+      await Router.push('/tabs/accounts');
     } catch (error) {
       console.log(error);
     }
   };
 
-  
   return (
     <>
       <Modal title="Add Account" control="add-account-modal">
@@ -68,7 +69,9 @@ export default function AddAccount() {
             </div>
           </div>
           <div className="modal-action m-0">
-            <button className="btn" type="submit">Save</button>
+            <button className="btn" type="submit">
+              Save
+            </button>
           </div>
         </form>
       </Modal>

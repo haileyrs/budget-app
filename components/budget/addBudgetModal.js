@@ -1,5 +1,6 @@
 import Modal from '../modalTemplate';
 import styles from './budget.module.css';
+import Router from 'next/router';
 
 export default function AddBudget() {
   const handleSubmit = async (event) => {
@@ -8,7 +9,7 @@ export default function AddBudget() {
       const data = {
         userId: 1,
         category: event.target.category.value,
-        max: parseFloat(event.target.max.value),
+        max: parseFloat(event.target.max.value)
       };
       const response = await fetch(`/api/budget`, {
         method: 'POST',
@@ -18,6 +19,7 @@ export default function AddBudget() {
 
       const result = await response.json();
       console.log(result);
+      await Router.push('/tabs/budgets');
     } catch (error) {
       console.log(error);
     }
@@ -58,7 +60,9 @@ export default function AddBudget() {
             </div>
           </div>
           <div className="modal-action m-0">
-            <button className="btn" type="submit">Save</button>
+            <button className="btn" type="submit">
+              Save
+            </button>
           </div>
         </form>
       </Modal>

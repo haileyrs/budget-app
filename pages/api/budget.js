@@ -63,7 +63,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method == 'DELETE') {
-    const budgetId = req.id;
+    const budgetId = req.body;
     const deleteBudget = await prisma.budget.delete({
       where: {
         id: budgetId

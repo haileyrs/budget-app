@@ -9,6 +9,7 @@ export default function Modal({ children, title, control }) {
               <h2>{title}</h2>
             </article>
             <label
+              id={control}
               htmlFor={control}
               className="btn btn-circle btn-ghost absolute right-2 top-2"
             >

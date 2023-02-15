@@ -14,6 +14,13 @@ export default function Settings() {
               <h1>Settings</h1>
             </article>
           </div>
+          <div className="flex flex-row">
+            <label className="swap">
+              <input type="checkbox" />
+              <div className="swap-on">ON</div>
+              <div className="swap-off">OFF</div>
+            </label>
+          </div>
         </main>
       </InternalNavBar>
     </>

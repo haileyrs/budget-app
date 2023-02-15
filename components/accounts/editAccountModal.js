@@ -23,7 +23,8 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
       });
 
       const result = await response.json();
-      console.log(result)
+      document.getElementById(id).click();
+      // console.log(result)
       await Router.push('/tabs/accounts');
     } catch (error) {
       console.log(error);

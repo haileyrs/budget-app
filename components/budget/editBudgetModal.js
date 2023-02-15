@@ -19,7 +19,8 @@ export default function EditBudget({ id, name, amount }) {
       });
 
       const result = await response.json();
-      console.log(result);
+      document.getElementById(id).click();
+      // console.log(result);
       await Router.push('/tabs/budgets');
     } catch (error) {
       console.log(error);

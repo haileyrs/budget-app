@@ -18,7 +18,8 @@ export default function AddBudget() {
       });
 
       const result = await response.json();
-      console.log(result);
+      // console.log(result);
+      document.getElementById('add-budget-modal').click();
       await Router.push('/tabs/budgets');
     } catch (error) {
       console.log(error);

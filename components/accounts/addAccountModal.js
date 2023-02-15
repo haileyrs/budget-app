@@ -19,7 +19,8 @@ export default function AddAccount() {
       });
 
       const result = await response.json();
-      console.log(result);
+      document.getElementById('add-account-modal').click();
+      // console.log(result);
       await Router.push('/tabs/accounts');
     } catch (error) {
       console.log(error);

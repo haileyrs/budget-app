@@ -1,5 +1,12 @@
 import prisma from '@/lib/prisma';
 
+let today = new Date();
+let y = today.getFullYear();
+let m = today.getMonth() + 1;
+let d = today.getDate();
+
+const apiDate = m + '/' + d + '/' + y
+
 // get serverside props for page loads
 // add method to find all accounts for user
 export default async function handler(req, res) {
@@ -35,7 +42,6 @@ export default async function handler(req, res) {
   }
 
   if (req.method == 'POST') {
-    // add unique last updated function
     const { userId, name, type, value } = req.body;
     const result = await prisma.account.create({
       data: {
@@ -43,14 +49,13 @@ export default async function handler(req, res) {
         name: name,
         type: type,
         value: value,
-        lastUpdated: '01/02/2023'
+        lastUpdated: apiDate
       }
     });
     res.status(201).json(result);
   }
 
   if (req.method == 'PUT') {
-    // add unique last updated function
     const { id, name, type, value } = req.body;
     const updateaccount = await prisma.account.update({
       where: {
@@ -60,7 +65,7 @@ export default async function handler(req, res) {
         name: name,
         type: type,
         value: value,
-        lastUpdated: '01/02/2023'
+        lastUpdated: apiDate
       }
     });
     res.status(201).json(updateaccount);

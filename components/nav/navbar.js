@@ -56,9 +56,10 @@ export default function NavBar() {
           </ul>
         </div>
         <div className="navbar-end">
-          <label htmlFor="login-modal" className="btn">
+          <label htmlFor="login-modal" className="btn btn-primary btn-outline">
             Log In
           </label>
+          <button className="btn btn-primary ml-2">Sign Up</button>
         </div>
         <LoginModal />
       </header>

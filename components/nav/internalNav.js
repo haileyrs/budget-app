@@ -89,7 +89,7 @@ export default function InternalNavBar({ children }) {
         </div>
         <div className="drawer-side">
           <label htmlFor="my-drawer" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80 bg-base-100 text-base-content bg-neutral">
+          <ul className="menu p-4 w-80 text-base-content bg-neutral">
             <li>
               <Link
                 className={activeClass('/tabs/summary')}

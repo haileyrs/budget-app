@@ -1,5 +1,6 @@
-import LoginModal from "../user/loginModal"
-import Link from "next/link"
+import LoginModal from '../user/loginModal';
+import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 
 export default function NavBar() {
   return (
@@ -25,16 +26,16 @@ export default function NavBar() {
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-neutral rounded-box w-52"
             >
               <li>
-                <a>About</a>
-              </li>
-              <li tabIndex={0}>
-                <a className="justify-between">Parent</a>
+                <Link href="/#about-section">About</Link>
               </li>
               <li>
-                <a>Item 3</a>
+                <Link href="/#features-section">Features</Link>
+              </li>
+              <li>
+                <Link href="/#start-section">Get Started</Link>
               </li>
             </ul>
           </div>
@@ -45,17 +46,27 @@ export default function NavBar() {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <a>About</a>
-            </li>
-            <li tabIndex={0}>
-              <a>Parent</a>
+              <Link href="/#about-section">About</Link>
             </li>
             <li>
-              <a>Item 3</a>
+              <Link href="/#features-section">Features</Link>
+            </li>
+            <li>
+              <Link href="/#start-section">Get Started</Link>
             </li>
           </ul>
         </div>
         <div className="navbar-end">
+          <a 
+            href={'/api/auth/signin'} 
+            onClick={(e) => {
+              e.preventDefault() 
+              signIn()
+            }}
+          >
+            Sign in
+
+          </a>
           <label htmlFor="login-modal" className="btn btn-primary btn-outline">
             Log In
           </label>

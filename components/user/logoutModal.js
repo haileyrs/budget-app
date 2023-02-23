@@ -1,5 +1,6 @@
 import Modal from "../modalTemplate";
 import Link from "next/link";
+import { useSession, signOut } from 'next-auth/react';
 
 export default function LogoutModal() {
   return (
@@ -14,7 +15,7 @@ export default function LogoutModal() {
         <div className="modal-action">
           <label htmlFor="logout-modal" className="btn">Cancel</label>
           <Link href="/logout/">
-            <label className="btn">Log Out</label>
+            <button className="btn" onClick={() => signOut()}>Log Out</button>
           </Link>
         </div>
       </Modal>

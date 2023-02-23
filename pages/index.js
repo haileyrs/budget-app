@@ -15,8 +15,8 @@ export default function Home() {
       <NavBar></NavBar>
       <main>
         <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center content-center">
-          <div className="flex items-center p-2">
-            <section className="prose body-font font-italiana">
+          <div id="about-section" className="flex items-center p-2">
+            <section className="prose">
               <h1 id="home-page-title">Big heading</h1>
             </section>
           </div>
@@ -27,6 +27,7 @@ export default function Home() {
                 <div className="artboard artboard-demo bg-neutral phone-1">
                   <Image
                     src="/../public/images/phone.png"
+                    alt="Screenshot of Application Page on mobile"
                     width={350}
                     height={675}
                   />
@@ -34,11 +35,12 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="flex items-center p-2">
+          <div id="features-section" className="flex justify-center p-2">
             <div className="mockup-window border bg-base-300">
               <div className="flex justify-center bg-base-200">
                 <Image
                   src="/../public/images/budgetScreen.png"
+                  alt="Screenshot of Internal Application Page on desktop"
                   width={600}
                   height={500}
                 />
@@ -50,7 +52,7 @@ export default function Home() {
               <h1>Big heading 2</h1>
             </article>
           </div>
-          <div className="flex items-center p-2">
+          <div id="start-section" className="flex items-center p-2">
             <article className="prose">
               <h1>instructions for setup</h1>
             </article>

@@ -2,17 +2,17 @@ import Modal from '../modalTemplate';
 import styles from './account.module.css';
 import Router from 'next/router';
 
-export default function AddAccount() {
+export default function AddAccount({ user }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const data = {
-        userId: 1,
+        userId: user.id,
         name: event.target.name.value,
         type: event.target.type.value,
         value: parseFloat(event.target.amount.value)
       };
-      const response = await fetch(`/api/account`, {
+      const response = await fetch(`/api/moneyAccount`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
@@ -20,7 +20,7 @@ export default function AddAccount() {
 
       const result = await response.json();
       document.getElementById('add-account-modal').click();
-      // console.log(result);
+      console.log(result);
       await Router.push('/tabs/accounts');
     } catch (error) {
       console.log(error);

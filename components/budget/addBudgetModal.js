@@ -2,12 +2,12 @@ import Modal from '../modalTemplate';
 import styles from './budget.module.css';
 import Router from 'next/router';
 
-export default function AddBudget() {
+export default function AddBudget({ user }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const data = {
-        userId: 1,
+        userId: user.id,
         category: event.target.category.value,
         max: parseFloat(event.target.max.value)
       };
@@ -18,7 +18,7 @@ export default function AddBudget() {
       });
 
       const result = await response.json();
-      // console.log(result);
+      console.log(result);
       document.getElementById('add-budget-modal').click();
       await Router.push('/tabs/budgets');
     } catch (error) {

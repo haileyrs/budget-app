@@ -16,7 +16,7 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
         type: type,
         value: event.target.amount.value != '' ? parseFloat(event.target.amount.value) : amount
       };
-      const response = await fetch(`/api/account`, {
+      const response = await fetch(`/api/moneyAccount`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
@@ -36,9 +36,9 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
   const handleDelete = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`/api/account`, {
+      const response = await fetch(`/api/moneyAccount`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: id
       });
       const result = await response.json();

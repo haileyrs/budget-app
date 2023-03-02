@@ -21,12 +21,13 @@ export async function getServerSideProps(context) {
   console.log(accounts)
   return {
     props: {
-      accounts: accounts
+      accounts: accounts,
+      user: user
     }
   };
 }
 
-export default function Accounts({ accounts }) {
+export default function Accounts({ accounts, user }) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
@@ -147,7 +148,7 @@ export default function Accounts({ accounts }) {
                 />
               ))}
             </div>
-            <AddAccount />
+            <AddAccount user={user} />
             <PlaidAddAccount />
           </main>
         </InternalNavBar>

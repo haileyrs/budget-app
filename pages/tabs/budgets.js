@@ -20,12 +20,13 @@ export async function getServerSideProps(context) {
   console.log(budgets);
   return {
     props: {
-      budgets: budgets
+      budgets: budgets,
+      user: user
     }
   };
 }
 
-export default function Budgets({ budgets }) {
+export default function Budgets({ budgets, user }) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
@@ -87,7 +88,7 @@ export default function Budgets({ budgets }) {
               <BudgetWidget key="dining" name="Dining" value="150" max="300" />
             </div> */}
             </div>
-            <AddBudget />
+            <AddBudget user={user} />
           </main>
         </InternalNavBar>
       </>

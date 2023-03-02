@@ -1,7 +1,7 @@
 import EditBudget from './editBudgetModal';
 import styles from './budget.module.css';
 
-export default function BudgetWidget({ id, name, value, max }) {
+export default function BudgetWidget({ id, name, value, max, user }) {
   const remaining = max - value;
   return (
     <>
@@ -36,7 +36,7 @@ export default function BudgetWidget({ id, name, value, max }) {
           </div>
         </div>
       </div>
-      <EditBudget key={id} id={id} name={name} amount={max}/>
+      <EditBudget key={id} id={id} name={name} amount={max} user={user} />
     </>
   );
 }

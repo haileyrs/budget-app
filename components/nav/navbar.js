@@ -57,22 +57,22 @@ export default function NavBar() {
           </ul>
         </div>
         <div className="navbar-end">
-          <a 
-            href={'/api/auth/signin'} 
-            onClick={(e) => {
-              e.preventDefault() 
-              signIn()
-            }}
-          >
-            Sign in
-
-          </a>
-          <label htmlFor="login-modal" className="btn btn-primary btn-outline">
+          {/* <label htmlFor="login-modal" className="btn btn-primary btn-outline">
             Log In
-          </label>
+          </label> */}
+          <button
+            className="btn btn-primary btn-outline"
+            onClick={() =>
+              signIn(undefined, {
+                callbackUrl: 'http://localhost:3000/tabs/summary'
+              })
+            }
+          >
+            Log in
+          </button>
           <button className="btn btn-primary ml-2">Sign Up</button>
         </div>
-        <LoginModal />
+        {/* <LoginModal /> */}
       </header>
     </>
   );

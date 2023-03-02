@@ -16,8 +16,7 @@ export default async function handler(req, res) {
 
   if (session) {
     if (req.method == 'GET') {
-      // const { userId, type } = req.body;
-      let accounts = {};
+      let accounts = [];
       // if (type) {
       //   accounts = await prisma.account.findUnique({
       //     where: {
@@ -38,17 +37,17 @@ export default async function handler(req, res) {
       //     }
       //   });
       // }
-      accounts = await prisma.account.findMany({
-        where: {
-          userId: 1
-        }
+      accounts = await prisma.moneyAccount.findMany({
+        // where: {
+        //   userId: session.userId
+        // }
       });
       res.status(200).json(accounts);
     }
 
     if (req.method == 'POST') {
       const { userId, name, type, value } = req.body;
-      const result = await prisma.account.create({
+      const result = await prisma.moneyAccount.create({
         data: {
           userId: userId,
           name: name,
@@ -62,7 +61,7 @@ export default async function handler(req, res) {
 
     if (req.method == 'PUT') {
       const { id, name, type, value } = req.body;
-      const updateaccount = await prisma.account.update({
+      const updateaccount = await prisma.moneyAccount.update({
         where: {
           id: id
         },
@@ -78,15 +77,14 @@ export default async function handler(req, res) {
 
     if (req.method == 'DELETE') {
       const accountId = req.body;
-      const deleteaccount = await prisma.account.delete({
+      const deleteaccount = await prisma.moneyAccount.delete({
         where: {
           id: accountId
         }
       });
       res.status(201).json(deleteaccount);
     }
+  } else {
+    res.status(401);
   }
-
-  res.status(401);
-  
 }

@@ -9,7 +9,6 @@ export default async function handler(req, res) {
 
   if (session) {
     if (req.method == 'GET') {
-      // const { userId, category } = req.body;
       let budgets = {};
       // if (category) {
       //   budgets = await prisma.budget.findUnique({
@@ -32,9 +31,9 @@ export default async function handler(req, res) {
       //   });
       // }
       budgets = await prisma.budget.findMany({
-        where: {
-          userId: 1
-        }
+        // where: {
+        //   userId: 1
+        // }
       });
       res.status(200).json(budgets);
     }

@@ -3,13 +3,25 @@ import AccountWidget from '@/components/accounts/accountWidget';
 import AddAccount from '@/components/accounts/addAccountModal';
 import PlaidAddAccount from '@/components/accounts/plaidModal';
 import Head from 'next/head';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
+import prisma from '@/lib/prisma';
 
-export async function getServerSideProps() {
-  const accounts = []
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions)
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email }
+  });
+  console.log(user);
+  const accounts = await prisma.moneyAccount.findMany({
+    where: { userId: user.id }
+  });
+
+  console.log(accounts)
   return {
     props: {
-      accounts
+      accounts: accounts
     }
   };
 }

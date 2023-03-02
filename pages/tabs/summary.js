@@ -2,24 +2,42 @@ import InternalNavBar from '@/components/nav/internalNav';
 import TransactionTable from '@/components/transactionTable';
 import Head from 'next/head';
 import Link from 'next/link';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
+import prisma from '@/lib/prisma';
 
-export async function getServerSideProps() {
-  const accounts = []
-  const budgets = []
-  const name = "opal"
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  console.log(session)
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email }
+  });
+  console.log(user)
+  const accounts = await prisma.moneyAccount.findMany({
+    where: { userId: user.id }
+  });
+  const budgets = await prisma.budget.findMany({ where: { userId: user.id } });
+  // const transactions = await prisma.transaction.findMany({
+  //   where: { userId: user.id }
+  // });
+  const transactions = []
+
+  console.log(budgets);
+  console.log(accounts);
+  console.log(transactions);
   return {
     props: {
-      accounts,
-      budgets,
-      name
+      accounts: accounts,
+      budgets: budgets,
+      transactions: transactions
     }
   };
 }
 
-export default function Summary({ accounts, budgets, name }) {
-  const {data: session, status} = useSession({required: true})
-  console.log(session)
+export default function Summary({ accounts, budgets, transactions }) {
+  const { data: session, status } = useSession({ required: true });
+  // console.log(session)
 
   if (status == 'authenticated') {
     let netWorth = 0;
@@ -95,5 +113,4 @@ export default function Summary({ accounts, budgets, name }) {
       </>
     );
   }
-  
 }

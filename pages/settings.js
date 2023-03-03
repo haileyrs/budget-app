@@ -1,6 +1,7 @@
 import InternalNavBar from '@/components/nav/internalNav';
 import Head from 'next/head';
 
+// this could be a modal instead of a page
 export default function Settings() {
   return (
     <>

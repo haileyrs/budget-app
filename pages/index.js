@@ -12,67 +12,68 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar></NavBar>
-      <main>
-        <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center content-center">
-          <div id="about-section" className="flex items-center p-2">
-            <section className="prose">
-              <h1 id="home-page-title">Big heading</h1>
-            </section>
-          </div>
-          <div className="flex items-center p-2">
-            <div className="mockup-phone border-primary">
-              <div className="camera"></div>
-              <div className="display">
-                <div className="artboard artboard-demo bg-neutral phone-1">
+      <NavBar>
+        <main>
+          <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center content-center">
+            <div id="about-section" className="flex items-center p-2">
+              <section className="prose">
+                <h1 id="home-page-title">Big heading</h1>
+              </section>
+            </div>
+            <div className="flex items-center p-2">
+              <div className="mockup-phone border-primary">
+                <div className="camera"></div>
+                <div className="display">
+                  <div className="artboard artboard-demo bg-neutral phone-1">
+                    <Image
+                      src="/../public/images/phone.png"
+                      alt="Screenshot of Application Page on mobile"
+                      width={350}
+                      height={675}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="features-section" className="flex justify-center p-2">
+              <div className="mockup-window border bg-base-300">
+                <div className="flex justify-center bg-base-200">
                   <Image
-                    src="/../public/images/phone.png"
-                    alt="Screenshot of Application Page on mobile"
-                    width={350}
-                    height={675}
+                    src="/../public/images/budgetScreen.png"
+                    alt="Screenshot of Internal Application Page on desktop"
+                    width={600}
+                    height={500}
                   />
                 </div>
               </div>
             </div>
-          </div>
-          <div id="features-section" className="flex justify-center p-2">
-            <div className="mockup-window border bg-base-300">
-              <div className="flex justify-center bg-base-200">
-                <Image
-                  src="/../public/images/budgetScreen.png"
-                  alt="Screenshot of Internal Application Page on desktop"
-                  width={600}
-                  height={500}
-                />
+            <div className="flex items-center p-2">
+              <article className="prose">
+                <h1>Big heading 2</h1>
+              </article>
+            </div>
+            <div id="start-section" className="flex items-center p-2">
+              <article className="prose">
+                <h1>instructions for setup</h1>
+              </article>
+            </div>
+            <div className="flex items-center p-2">
+              <div className="mockup-code">
+                <pre data-prefix="$">
+                  <code>npm i daisyui</code>
+                </pre>
+                <pre data-prefix=">" className="text-warning">
+                  <code>installing...</code>
+                </pre>
+                <pre data-prefix=">" className="text-success">
+                  <code>Done!</code>
+                </pre>
               </div>
             </div>
           </div>
-          <div className="flex items-center p-2">
-            <article className="prose">
-              <h1>Big heading 2</h1>
-            </article>
-          </div>
-          <div id="start-section" className="flex items-center p-2">
-            <article className="prose">
-              <h1>instructions for setup</h1>
-            </article>
-          </div>
-          <div className="flex items-center p-2">
-            <div className="mockup-code">
-              <pre data-prefix="$">
-                <code>npm i daisyui</code>
-              </pre>
-              <pre data-prefix=">" className="text-warning">
-                <code>installing...</code>
-              </pre>
-              <pre data-prefix=">" className="text-success">
-                <code>Done!</code>
-              </pre>
-            </div>
-          </div>
-        </div>
-      </main>
-      <Footer></Footer>
+        </main>
+        <Footer />
+      </NavBar>
     </>
   );
 }

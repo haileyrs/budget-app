@@ -14,9 +14,9 @@ export default function LogoutModal() {
         
         <div className="modal-action">
           <label htmlFor="logout-modal" className="btn">Cancel</label>
-          <Link href="/logout/">
-            <button className="btn" onClick={() => signOut()}>Log Out</button>
-          </Link>
+          
+          <button className="btn" onClick={() => signOut({callbackUrl: 'http://localhost:3000/logout'})}>Log Out</button>
+          
         </div>
       </Modal>
     </>

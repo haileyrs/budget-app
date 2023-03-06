@@ -39,6 +39,7 @@ export default function AddAccount({ user }) {
                 id="name"
                 placeholder="account name"
                 className="input input-bordered input-primary w-full max-w-xs"
+                required
               />
             </div>
             <div className={styles.inputdiv}>
@@ -47,6 +48,7 @@ export default function AddAccount({ user }) {
                 name="type"
                 className="select select-primary w-full max-w-xs"
                 defaultValue="account type"
+                required
               >
                 <option disabled>account type</option>
                 <option>Checking</option>
@@ -66,6 +68,7 @@ export default function AddAccount({ user }) {
                 name="amount"
                 placeholder="current balance"
                 className="input input-bordered input-primary w-full max-w-xs"
+                required
               />
             </div>
           </div>

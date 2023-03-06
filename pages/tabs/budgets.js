@@ -12,12 +12,10 @@ export async function getServerSideProps(context) {
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
   });
-  console.log(user);
   const budgets = await prisma.budget.findMany({
     where: { userId: user.id }
   });
 
-  console.log(budgets);
   return {
     props: {
       budgets: budgets,

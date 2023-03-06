@@ -13,7 +13,6 @@ export async function getServerSideProps(context) {
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
   });
-  console.log(user)
   const accounts = await prisma.moneyAccount.findMany({
     where: { userId: user.id }
   });
@@ -23,9 +22,6 @@ export async function getServerSideProps(context) {
   // });
   const transactions = []
 
-  console.log(budgets);
-  console.log(accounts);
-  console.log(transactions);
   return {
     props: {
       accounts: accounts,
@@ -37,7 +33,6 @@ export async function getServerSideProps(context) {
 
 export default function Summary({ accounts, budgets, transactions }) {
   const { data: session, status } = useSession({ required: true });
-  // console.log(session)
 
   if (status == 'authenticated') {
     let netWorth = 0;
@@ -45,6 +40,11 @@ export default function Summary({ accounts, budgets, transactions }) {
     let budgetLeft = 0;
     let max = 0;
     let spent = 0;
+    let monthRange = "";
+
+    const today = new Date();
+    const month = today.toLocaleString('default', { month: 'long' });
+    monthRange = month + " 1 - Today"
 
     if (accounts) {
       accounts.forEach((a) => (netWorth += a.value));
@@ -82,7 +82,7 @@ export default function Summary({ accounts, budgets, transactions }) {
                 <div className="stat">
                   <div className="stat-title">Monthly Spend</div>
                   <div className="stat-value">${spent}</div>
-                  <div className="stat-desc">Jan 1 - Feb 1</div>
+                  <div className="stat-desc">{monthRange}</div>
                 </div>
 
                 <div className="stat">

@@ -37,6 +37,7 @@ export default function AddBudget({ user }) {
                 name="category"
                 className="select select-primary w-full max-w-xs"
                 defaultValue="category name"
+                required
               >
                 {/* include options that plaid gives i think? don't include if a budget already exists, use edit feature */}
                 <option disabled>category name</option>
@@ -57,6 +58,7 @@ export default function AddBudget({ user }) {
                 name="max"
                 placeholder="amount"
                 className="input input-bordered input-primary w-full max-w-xs"
+                required
               />
             </div>
           </div>

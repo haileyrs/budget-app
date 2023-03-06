@@ -1,8 +1,28 @@
 import InternalNavBar from '@/components/nav/internalNav';
 import Head from 'next/head'
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
+import prisma from '@/lib/prisma';
 
-export default function Export() {
+export async function getServerSideProps(context) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email }
+  });
+  const accounts = await prisma.moneyAccount.findMany({
+    where: { userId: user.id }
+  });
+
+  return {
+    props: {
+      accounts: accounts,
+      user: user
+    }
+  };
+}
+
+export default function Export({ accounts, user }) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
@@ -18,13 +38,24 @@ export default function Export() {
                 <h1>Export</h1>
               </article>
             </div>
+            <div className="space-x-4">
+              <select
+                className="select select-primary w-full max-w-xs"
+                defaultValue="select your output"
+              >
+                <option disabled>select your output</option>
+                <option>CSV File</option>
+                <option>Sankey Diagram Format</option>
+              </select>
+              <button className="btn">GO</button>
+            </div>
             <div className="flex flex-col">
               <div className="flex">
                 <article className="prose">
                   <h2>Filters</h2>
                 </article>
               </div>
-              <div className="flex flex-col">
+              <div className="flex space-x-4">
                 <p>Date Range</p>
                 <div className="form-control">
                   <div className="input-group">
@@ -77,6 +108,15 @@ export default function Export() {
                     />
                   </div>
                 </div>
+              </div>
+              <p>Accounts</p>
+              <div className="form-control">
+                {accounts.map((a) => (
+                  <label className="label cursor-pointer">
+                    <span className="label-text">{a.name}</span>
+                    <input type="checkbox" checked className="checkbox" />
+                  </label>
+                ))}
               </div>
             </div>
           </main>

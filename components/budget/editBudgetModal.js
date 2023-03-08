@@ -66,6 +66,7 @@ export default function EditBudget({ id, name, amount }) {
                 name="amount"
                 placeholder={amount}
                 className="input input-bordered input-primary w-full max-w-xs"
+                required
               />
             </div>
           </div>

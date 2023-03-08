@@ -15,7 +15,6 @@ export default function TransactionTable({ title = 'Transactions', transactions,
                 <th>Category</th>
                 <th>Amount</th>
                 <th>Account</th>
-
                 <th>Vendor</th>
               </tr>
             </thead>
@@ -32,7 +31,7 @@ export default function TransactionTable({ title = 'Transactions', transactions,
                   <td>{t.vendor}</td>
                 </tr>
               ))}
-              <tr>
+              {/* <tr>
                 <th>1/3/23</th>
                 <td>Discover</td>
                 <td>TARGET</td>
@@ -52,7 +51,7 @@ export default function TransactionTable({ title = 'Transactions', transactions,
                 <td>Tax Accountant</td>
                 <td>Red</td>
                 <td>polka dot</td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>

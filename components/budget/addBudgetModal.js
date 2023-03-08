@@ -2,14 +2,17 @@ import Modal from '../modalTemplate';
 import styles from './budget.module.css';
 import Router from 'next/router';
 
-export default function AddBudget({ user }) {
+export default function AddBudget({ user, categories }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      const category = categories.find(
+        (e) => e.name == event.target.category.value
+      );
       const data = {
         userId: user.id,
-        category: event.target.category.value,
-        max: parseFloat(event.target.max.value)
+        categoryId: category.id,
+        max: parseFloat(event.target.max.value),
       };
       const response = await fetch(`/api/budget`, {
         method: 'POST',
@@ -36,16 +39,14 @@ export default function AddBudget({ user }) {
                 id="category"
                 name="category"
                 className="select select-primary w-full max-w-xs"
-                defaultValue="category name"
+                defaultValue="category"
                 required
               >
-                {/* include options that plaid gives i think? don't include if a budget already exists, use edit feature */}
-                <option disabled>category name</option>
-                <option>Clothing</option>
-                <option>Mortgage/Rent</option>
-                <option>Groceries</option>
-                <option>Dining Out</option>
-                <option>Fun</option>
+                <option disabled>category</option>
+                {/* exclude options that are already in use */}
+                {categories.map((c) => (
+                  <option key={c.id}>{c.name}</option>
+                ))}
               </select>
             </div>
             <div className={styles.dollar}>

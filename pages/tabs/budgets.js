@@ -15,10 +15,15 @@ export async function getServerSideProps(context) {
 
   // only pull budgets where month and year are this month and year
   const budgets = await prisma.budget.findMany({
-    where: { userId: user.id }
+    where: { userId: user.id },
+    include: {
+      category: {
+        select: { name: true }
+      }
+    },
   });
   const categories = await prisma.category.findMany();
-
+  console.log(budgets)
   return {
     props: {
       budgets: budgets,
@@ -28,7 +33,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Budgets({ budgets, user }) {
+export default function Budgets({ budgets, categories, user }) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
@@ -68,29 +73,18 @@ export default function Budgets({ budgets, user }) {
             <div className="flex flex-col">
               {/* for budget in list of budgets */}
               {budgets.map((budget) => (
-                <div key={budget.category} className="w-full">
+                <div key={budget.id} className="w-full">
                   <BudgetWidget
-                    key={budget.category}
+                    key={budget.id}
                     id={budget.id}
-                    name={budget.category}
+                    name={budget.category.name}
                     value={budget.value}
                     max={budget.max}
                   />
                 </div>
               ))}
-              {/* <div className="w-full">
-              <BudgetWidget
-                key="clothing"
-                name="Clothing"
-                value="300"
-                max="500"
-              />
             </div>
-            <div className="w-full">
-              <BudgetWidget key="dining" name="Dining" value="150" max="300" />
-            </div> */}
-            </div>
-            <AddBudget user={user} />
+            <AddBudget user={user} categories={categories} />
           </main>
         </InternalNavBar>
       </>

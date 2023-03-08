@@ -10,17 +10,39 @@ import prisma from '@/lib/prisma';
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
   console.log(session)
+  let today = new Date();
+  let y = today.getFullYear();
+  let m = today.getMonth() + 1;
+  console.log(m)
+  console.log(y)
+
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
   });
   const accounts = await prisma.moneyAccount.findMany({
     where: { userId: user.id }
   });
-  const budgets = await prisma.budget.findMany({ where: { userId: user.id } });
+  const budgets = await prisma.budget.findMany({
+    where: {
+      AND: [{ userId: user.id }, { month: m }, { year: y }]
+    }
+  });
   // const transactions = await prisma.transaction.findMany({
   //   where: { userId: user.id }
   // });
-  const transactions = []
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      AND: [{ moneyAccountId: { in: accounts.map((e) => e.id) } }, { month: m }, { year: y }]
+    },
+    include: {
+      category: {
+        select: { name: true }
+      },
+      moneyAccount: {
+        select: { name: true }
+      }
+    }
+  });
 
   return {
     props: {
@@ -51,7 +73,7 @@ export default function Summary({ accounts, budgets, transactions }) {
       netWorth = parseInt(netWorth);
     }
 
-    if (budgets) {
+    if (budgets.length) {
       budgets.forEach((b) => (max += b.max));
       budgets.forEach((b) => (spent += b.value));
       budgets.forEach((b) => (budgetLeft += b.max - b.value));
@@ -95,7 +117,7 @@ export default function Summary({ accounts, budgets, transactions }) {
                 <div className="card bg-base-100 shadow-xl">
                   <div className="card-body">
                     <h2 className="card-title">Saved This Month</h2>
-                    <p>$amount</p>
+                    <p>${budgetLeft}</p>
                     <div className="card-actions justify-end">
                       <Link href="/tabs/accounts/">
                         <label className="btn">Check It Out</label>
@@ -105,7 +127,7 @@ export default function Summary({ accounts, budgets, transactions }) {
                 </div>
               </div>
               <div className="pt-4 md:col-span-3">
-                <TransactionTable title="Recent Transactions" transactions={transactions} />
+                <TransactionTable title="Transactions This Month" transactions={transactions} />
               </div>
             </div>
           </main>

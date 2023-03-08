@@ -43,13 +43,13 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'POST') {
-      const { userId, category, max } = req.body;
+      const { userId, categoryId, max } = req.body;
       // do value math on this side by checking transactions
       // plaid supplies transaction categories so this structure will probably change
       const result = await prisma.budget.create({
         data: {
           userId: userId,
-          category: category,
+          categoryId: categoryId,
           max: max,
           value: 0,
           month: m,

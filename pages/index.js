@@ -59,11 +59,9 @@ export default function Home() {
               </div>
               <div className="flex items-center p-2">
                 <article className="prose">
-                  <h1>Customize everything.</h1>
+                  <h1>Create Budgets</h1>
                   <h3>
-                    Create and update budgets, accounts, and transactions
-                    yourself, or import your accounts quickly and securely using
-                    Plaid.
+                    Create budgets and add transactions to track spending in customizable categories.
                   </h3>
                 </article>
               </div>
@@ -83,11 +81,9 @@ export default function Home() {
               </div>
               <div className="flex items-center p-2 lg:order-first">
                 <article className="prose">
-                  <h1>Customize everything 2.</h1>
+                  <h1>Monitor Account Balances</h1>
                   <h3>
-                    Create and update budgets, accounts, and transactions
-                    yourself, or import your accounts quickly and securely using
-                    Plaid.
+                    Add your financial accounts for an organized view of your net worth.
                   </h3>
                 </article>
               </div>
@@ -107,9 +103,9 @@ export default function Home() {
               </div>
               <div className="flex items-center p-2">
                 <article className="prose">
-                  <h1>Talk about export section</h1>
+                  <h1>Export Your Data</h1>
                   <h3>
-                    Seamlessly export your data to csv, a sankey diagram, or into a format used to create a sankey diagram using an external site. Simply select your timeframe and the accounts you want to include.
+                    Seamlessly export your data to csv, or into a format used to create a sankey diagram using an external site. Simply select your timeframe and the accounts you want to include.
                   </h3>
                 </article>
               </div>

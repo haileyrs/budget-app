@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'POST') {
-      const name = req.body;
+      const { name } = req.body;
       const result = await prisma.category.create({
         data: {
           name: name

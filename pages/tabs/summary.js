@@ -1,5 +1,5 @@
 import InternalNavBar from '@/components/nav/internalNav';
-import TransactionTable from '@/components/transactionTable';
+import TransactionTable from '@/components/transactions/transactionTable';
 import Head from 'next/head';
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
@@ -105,7 +105,7 @@ export default function Summary({ accounts, budgets, transactions }) {
                 </div>
               </div>
               <div className="pt-4 md:col-span-3">
-                <TransactionTable title="Recent Transactions" />
+                <TransactionTable title="Recent Transactions" transactions={transactions} />
               </div>
             </div>
           </main>

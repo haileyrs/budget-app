@@ -35,15 +35,17 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'POST') {
-      const { name, vendor, amount, category, account } = req.body;
+      const { vendor, amount, categoryId, moneyAccountId, month, day, year } = req.body;
       // do value math on this side by checking transactions
       const result = await prisma.transaction.create({
         data: {
-          name: name,
           vendor: vendor,
           amount: amount,
-          category: category,
-          account: account
+          categoryId: categoryId,
+          moneyAccountId: moneyAccountId,
+          month: month,
+          day: day,
+          year: year
         }
       });
       res.status(201).json(result);
@@ -51,16 +53,18 @@ export default async function handler(req, res) {
 
     if (req.method == 'PUT') {
       const transactionId = req.id;
-      const { name, vendor, amount, category } = req.body;
+      const { vendor, amount, category, month, day, year } = req.body;
       const updatetransaction = await prisma.transaction.update({
         where: {
           id: transactionId
         },
         data: {
-          name: name,
           vendor: vendor,
           amount: amount,
-          category: category
+          category: category,
+          month: month,
+          day: day,
+          year: year
         }
       });
       res.status(201).json(updatetransaction);

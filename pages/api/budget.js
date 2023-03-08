@@ -2,6 +2,10 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from './auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 
+let today = new Date();
+let y = today.getFullYear();
+let m = today.getMonth();
+
 // get serverside props for page loads
 // add method to find all budgets for user
 export default async function handler(req, res) {
@@ -47,7 +51,9 @@ export default async function handler(req, res) {
           userId: userId,
           category: category,
           max: max,
-          value: 0
+          value: 0,
+          month: m,
+          year: y
         }
       });
       res.status(201).json(result);

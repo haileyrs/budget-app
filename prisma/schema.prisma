@@ -46,6 +46,7 @@ model User {
   sessions      Session[]
   Budget        Budget[]
   MoneyAccount  MoneyAccount[]
+  plaidItems    PlaidItem[]
 }
 
 model VerificationToken {
@@ -54,6 +55,15 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PlaidItem {
+  id          Int     @id @default(autoincrement())
+  userId      String
+  accessToken String
+  itemId      String
+  name        String?
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model MoneyAccount {
@@ -68,21 +78,33 @@ model MoneyAccount {
 }
 
 model Budget {
-  id       Int    @id @default(autoincrement())
-  category String
-  max      Float
-  value    Float
-  user     User   @relation(fields: [userId], references: [id])
-  userId   String
+  id         Int      @id @default(autoincrement())
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  max        Float
+  value      Float
+  month      Int
+  year       Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
 }
 
 model Transaction {
   id             Int          @id @default(autoincrement())
-  name           String
   vendor         String
   amount         Float
-  category       String
+  day            Int
+  month          Int
+  year           Int
+  category       Category     @relation(fields: [categoryId], references: [id])
   categoryId     Int
   moneyAccount   MoneyAccount @relation(fields: [moneyAccountId], references: [id])
   moneyAccountId Int
+}
+
+model Category {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  Budget      Budget[]
+  Transaction Transaction[]
 }

@@ -17,8 +17,11 @@
     "eslint-config-next": "13.1.6",
     "next": "13.1.6",
     "next-auth": "^4.19.2",
+    "plaid": "^12.5.0",
+    "plaid-threads": "^14.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-plaid-link": "^3.4.0",
     "sqlite3": "^5.1.4"
   },
   "devDependencies": {

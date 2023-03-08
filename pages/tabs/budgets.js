@@ -12,13 +12,17 @@ export async function getServerSideProps(context) {
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
   });
+
+  // only pull budgets where month and year are this month and year
   const budgets = await prisma.budget.findMany({
     where: { userId: user.id }
   });
+  const categories = await prisma.category.findMany();
 
   return {
     props: {
       budgets: budgets,
+      categories: categories,
       user: user
     }
   };

@@ -32,27 +32,47 @@ export async function getServerSideProps(context) {
 
 export default function Settings({ categories }) {
   const { data: session, status } = useSession({ required: true });
+  let catError = false;
 
   if (status == 'authenticated') {
     const handleSubmit = async (event) => {
       event.preventDefault();
-      try {
-        const data = {
-          name: event.target.name.value
-        };
-        const response = await fetch(`/api/category`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
+      
+      if (categories.find(c => event.target.name.value == c.name)) {
+        catError = true;
+      } else {
+        try {
+          const data = {
+            name: event.target.name.value
+          };
+          const response = await fetch(`/api/category`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
 
+          const result = await response.json();
+          await Router.push('/settings');
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    const removeCategory = async (id, e) => {
+      e.preventDefault();
+      try {
+        const response = await fetch(`/api/category`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({categoryId: id})
+        });
         const result = await response.json();
-        
         await Router.push('/settings');
       } catch (error) {
         console.log(error);
       }
-    };
+    }
 
     return (
       <>
@@ -99,6 +119,27 @@ export default function Settings({ categories }) {
                     {categories.map((c) => (
                       <tr key={c.id}>
                         <th>{c.name}</th>
+                        <td>
+                          <label
+                            onClick={(e) => removeCategory(c.id, e)}
+                            className="btn"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </label>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

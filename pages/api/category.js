@@ -24,8 +24,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'PUT') {
-      const categoryId = req.id;
-      const name = req.body;
+      const { categoryId, name } = req.body;
       const updateCat = await prisma.category.update({
         where: {
           id: categoryId
@@ -38,7 +37,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'DELETE') {
-      const categoryId = req.id;
+      const { categoryId } = req.body;
       const deleteCat = await prisma.category.delete({
         where: {
           id: categoryId

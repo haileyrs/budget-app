@@ -39,7 +39,7 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
       const response = await fetch(`/api/moneyAccount`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: id
+        body: JSON.stringify({ id: id })
       });
       const result = await response.json();
       console.log(result);

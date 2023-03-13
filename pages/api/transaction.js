@@ -52,8 +52,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'PUT') {
-      const transactionId = req.id;
-      const { vendor, amount, category, month, day, year } = req.body;
+      const { transactionId, vendor, amount, categoryId, moneyAccountId, month, day, year } = req.body;
       const updatetransaction = await prisma.transaction.update({
         where: {
           id: transactionId
@@ -61,7 +60,8 @@ export default async function handler(req, res) {
         data: {
           vendor: vendor,
           amount: amount,
-          category: category,
+          categoryId: categoryId,
+          moneyAccountId: moneyAccountId,
           month: month,
           day: day,
           year: year
@@ -71,7 +71,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'DELETE') {
-      const transactionId = req.id;
+      const { transactionId } = req.body;
       const deletetransaction = await prisma.transaction.delete({
         where: {
           id: transactionId

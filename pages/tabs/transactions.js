@@ -21,10 +21,10 @@ export async function getServerSideProps(context) {
     where: { moneyAccountId: { in: accounts.map((e) => e.id) } },
     include: {
       category: {
-        select: { name: true }
+        select: { name: true, id: true }
       },
       moneyAccount: {
-        select: { name: true }
+        select: { name: true, id: true }
       }
     }
   });
@@ -79,8 +79,12 @@ export default function Transactions({ user, transactions, categories, accounts 
                 Add New
               </label>
             </div>
-            <TransactionTable transactions={transactions} />
-            <AddTransaction user={user} categories={categories} accounts={accounts} />
+            <TransactionTable transactions={transactions} categories={categories} accounts={accounts} />
+            <AddTransaction
+              user={user}
+              categories={categories}
+              accounts={accounts}
+            />
           </main>
         </InternalNavBar>
       </>

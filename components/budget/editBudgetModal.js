@@ -20,7 +20,6 @@ export default function EditBudget({ id, name, amount }) {
 
       const result = await response.json();
       document.getElementById(id).click();
-      // console.log(result);
       await Router.push('/tabs/budgets');
     } catch (error) {
       console.log(error);
@@ -33,10 +32,9 @@ export default function EditBudget({ id, name, amount }) {
       const response = await fetch(`/api/budget`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: id
+        body: JSON.stringify({ id: id })
       });
       const result = await response.json();
-      console.log(result);
       await Router.push('/tabs/budgets');
     } catch (error) {
       console.log(error);

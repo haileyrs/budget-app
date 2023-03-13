@@ -45,7 +45,6 @@ export default async function handler(req, res) {
     if (req.method == 'POST') {
       const { userId, categoryId, max } = req.body;
       // do value math on this side by checking transactions
-      // plaid supplies transaction categories so this structure will probably change
       const result = await prisma.budget.create({
         data: {
           userId: userId,
@@ -73,10 +72,10 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'DELETE') {
-      const budgetId = req.body;
+      const { id } = req.body;
       const deleteBudget = await prisma.budget.delete({
         where: {
-          id: budgetId
+          id: id
         }
       });
       res.status(201).json(deleteBudget);

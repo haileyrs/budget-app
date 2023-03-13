@@ -1,3 +1,4 @@
+import SignUpInfo from './signUpInfo';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 
@@ -59,7 +60,7 @@ export default function NavBar({ children }) {
               >
                 Log in
               </button>
-              <button className="btn btn-primary ml-2">Sign Up</button>
+              <label htmlFor="sign-up-modal" className="btn btn-primary ml-2">Sign Up</label>
             </div>
           </div>
           <div>{children}</div>
@@ -79,6 +80,7 @@ export default function NavBar({ children }) {
           </ul>
         </div>
       </div>
+      <SignUpInfo />
     </>
   );
 }

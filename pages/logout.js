@@ -10,20 +10,23 @@ export default function LogoutPage() {
       </Head>
       <NavBar>
         <main>
-          <div className="flex flex-col items-center">
-            <p>You have been succesfully logged out.</p>
-            <button
-              className="btn"
-              onClick={() =>
-                signIn(undefined, {
-                  callbackUrl: 'http://localhost:3000/tabs/summary'
-                })
-              }
-            >
-              Log in Again
-            </button>
-            {/* <label htmlFor="login-modal" className="btn">Log In Again</label> */}
-            {/* <LoginModal /> */}
+          <div className="hero">
+            <div className="hero-content text-center">
+              <div className="max-w-md">
+                <h1 className="text-5xl font-bold pt-10">Goodbye!</h1>
+                <p className="py-6">You have been succesfully logged out.</p>
+                <button
+                  className="btn btn-primary"
+                  onClick={() =>
+                    signIn(undefined, {
+                      callbackUrl: 'http://localhost:3000/tabs/summary'
+                    })
+                  }
+                >
+                  Log in Again
+                </button>
+              </div>
+            </div>
           </div>
         </main>
       </NavBar>

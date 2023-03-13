@@ -38,6 +38,10 @@ main {
 } */
 
 
+.modal-content {
+  overflow-y: auto;
+}
+
 /* BUDGET */
 #budget-card {
   margin: 4px;

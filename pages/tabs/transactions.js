@@ -52,7 +52,7 @@ export default function Transactions({ user, transactions, categories, accounts 
         <Head>
           <title>Transactions</title>
         </Head>
-        <InternalNavBar>
+        <InternalNavBar user={user}>
           <main>
             <div className="flex flex-row" id="title-div">
               <article className="prose">

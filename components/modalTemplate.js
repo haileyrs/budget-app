@@ -30,11 +30,6 @@ export default function Modal({ children, title, control }) {
             </label>
           </div>
           <div className="modal-content">{children}</div>
-
-
-          {/* <div className="modal-action">
-            <label className="btn">Save</label>
-          </div> */}
         </div>
       </div>
     </>

@@ -31,7 +31,7 @@ export default function Export({ accounts, user }) {
         <Head>
           <title>Export</title>
         </Head>
-        <InternalNavBar>
+        <InternalNavBar user={user}>
           <main>
             <div className="flex flex-row" id="title-div">
               <article className="prose">

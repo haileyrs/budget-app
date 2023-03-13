@@ -42,7 +42,7 @@ export default function Budgets({ budgets, categories, user }) {
         <Head>
           <title>Budgets</title>
         </Head>
-        <InternalNavBar>
+        <InternalNavBar user={user}>
           <main>
             <div className="flex" id="title-div">
               <article className="prose">

@@ -3,7 +3,7 @@ import LogoutModal from '../user/logoutModal';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-export default function InternalNavBar({ children }) {
+export default function InternalNavBar({ children, user }) {
   const router = useRouter();
 
   const activeClass = (path) => {
@@ -133,7 +133,7 @@ export default function InternalNavBar({ children }) {
           </ul>
         </div>
       </div>
-      <ProfileModal />
+      <ProfileModal user={user}/>
       <LogoutModal />
     </>
   );

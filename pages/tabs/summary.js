@@ -13,8 +13,6 @@ export async function getServerSideProps(context) {
   let today = new Date();
   let y = today.getFullYear();
   let m = today.getMonth() + 1;
-  console.log(m)
-  console.log(y)
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
@@ -27,9 +25,6 @@ export async function getServerSideProps(context) {
       AND: [{ userId: user.id }, { month: m }, { year: y }]
     }
   });
-  // const transactions = await prisma.transaction.findMany({
-  //   where: { userId: user.id }
-  // });
   const transactions = await prisma.transaction.findMany({
     where: {
       AND: [{ moneyAccountId: { in: accounts.map((e) => e.id) } }, { month: m }, { year: y }]
@@ -46,6 +41,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
+      user: user,
       accounts: accounts,
       budgets: budgets,
       transactions: transactions
@@ -53,7 +49,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Summary({ accounts, budgets, transactions }) {
+export default function Summary({ user, accounts, budgets, transactions }) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
@@ -86,11 +82,11 @@ export default function Summary({ accounts, budgets, transactions }) {
         <Head>
           <title>Summary</title>
         </Head>
-        <InternalNavBar>
+        <InternalNavBar user={user}>
           <main>
             <div className="flex flex-row" id="title-div">
               <article className="prose">
-                <h1>Welcome, {session.user.name}!</h1>
+                <h1>Welcome, {user.displayName ? user.displayName : user.name }!</h1>
               </article>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3">

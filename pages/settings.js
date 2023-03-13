@@ -12,14 +12,7 @@ export async function getServerSideProps(context) {
     where: { email: session.user.email }
   });
 
-  // const budgets = await prisma.budget.findMany({
-  //   where: { userId: user.id },
-  //   include: {
-  //     category: {
-  //       select: { name: true }
-  //     }
-  //   }
-  // });
+  // fetch budgets to determine what categories can be safely deleted
   const categories = await prisma.category.findMany();
   
   return {
@@ -30,7 +23,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Settings({ categories }) {
+export default function Settings({ user, categories }) {
   const { data: session, status } = useSession({ required: true });
   let catError = false;
 
@@ -79,7 +72,7 @@ export default function Settings({ categories }) {
         <Head>
           <title>Settings</title>
         </Head>
-        <InternalNavBar>
+        <InternalNavBar user={user}>
           <main>
             <div className="flex flex-row" id="title-div">
               <article className="prose">

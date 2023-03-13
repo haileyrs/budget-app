@@ -17,26 +17,7 @@ export default async function handler(req, res) {
   if (session) {
     if (req.method == 'GET') {
       let accounts = [];
-      // if (type) {
-      //   accounts = await prisma.account.findUnique({
-      //     where: {
-      //       AND: [
-      //         {
-      //           userId: userId
-      //         },
-      //         {
-      //           type: type
-      //         }
-      //       ]
-      //     }
-      //   });
-      // } else {
-      //   accounts = await prisma.account.findMany({
-      //     where: {
-      //       userId: 1
-      //     }
-      //   });
-      // }
+      
       accounts = await prisma.moneyAccount.findMany({
         // where: {
         //   userId: session.userId

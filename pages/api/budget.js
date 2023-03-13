@@ -14,26 +14,6 @@ export default async function handler(req, res) {
   if (session) {
     if (req.method == 'GET') {
       let budgets = {};
-      // if (category) {
-      //   budgets = await prisma.budget.findUnique({
-      //     where: {
-      //       AND: [
-      //         {
-      //           userId: userId
-      //         },
-      //         {
-      //           categoryId: category
-      //         }
-      //       ]
-      //     }
-      //   });
-      // } else {
-      //   budgets = await prisma.budget.findMany({
-      //     where: {
-      //       userId: userId
-      //     }
-      //   });
-      // }
       budgets = await prisma.budget.findMany({
         // where: {
         //   userId: 1

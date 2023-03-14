@@ -33,7 +33,7 @@ export default function EditTransaction({
         moneyAccountId: moneyAccount.id,
         month:
           event.target.month.value != ''
-            ? parseInt(event.target.month.value) - 1
+            ? parseInt(event.target.month.value)
             : month,
         day:
           event.target.day.value != '' ? parseInt(event.target.day.value) : day,

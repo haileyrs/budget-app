@@ -4,7 +4,7 @@ import EditTransaction from './editTransactionModal';
 export default function TransactionTable({
   title = 'Transactions',
   transactions,
-  limit,
+  edit = true,
   accounts = [],
   categories = []
 }) {
@@ -23,7 +23,7 @@ export default function TransactionTable({
                 <th>Amount</th>
                 <th>Account</th>
                 <th>Vendor</th>
-                <th>Options</th>
+                {edit ? <th>Options</th> : ''}
               </tr>
             </thead>
             <tbody>
@@ -37,24 +37,28 @@ export default function TransactionTable({
                   <td>{t.amount.toFixed(2)}</td>
                   <td>{t.moneyAccount.name}</td>
                   <td>{t.vendor}</td>
-                  <td>
-                    <label htmlFor={t.id} className="btn btn-sm">
-                      Edit
-                    </label>
-                    <EditTransaction
-                      key={t.id}
-                      id={t.id}
-                      category={t.category}
-                      amount={t.amount}
-                      moneyAccount={t.moneyAccount}
-                      vendor={t.vendor}
-                      month={t.month}
-                      day={t.day}
-                      year={t.year}
-                      accounts={accounts}
-                      categories={categories}
-                    />
-                  </td>
+                  {edit ? (
+                    <td>
+                      <label htmlFor={t.id} className="btn btn-sm">
+                        Edit
+                      </label>
+                      <EditTransaction
+                        key={t.id}
+                        id={t.id}
+                        category={t.category}
+                        amount={t.amount}
+                        moneyAccount={t.moneyAccount}
+                        vendor={t.vendor}
+                        month={t.month}
+                        day={t.day}
+                        year={t.year}
+                        accounts={accounts}
+                        categories={categories}
+                      />
+                    </td>
+                  ) : (
+                    ''
+                  )}
                 </tr>
               ))}
             </tbody>

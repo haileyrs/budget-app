@@ -15,7 +15,7 @@ export default function AddTransaction({ user, categories, accounts }) {
         amount: parseFloat(event.target.amount.value),
         categoryId: newCategory.id,
         moneyAccountId: newAccount.id,
-        month: parseInt(event.target.month.value) - 1,
+        month: parseInt(event.target.month.value),
         day: parseInt(event.target.day.value),
         year: parseInt(event.target.year.value)
       };

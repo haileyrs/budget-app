@@ -39,6 +39,8 @@ export async function getServerSideProps(context) {
     }
   });
 
+  transactions.sort((t, a) => a.day - t.day);
+
   return {
     props: {
       user: user,
@@ -128,6 +130,7 @@ export default function Summary({ user, accounts, budgets, transactions }) {
                 <TransactionTable
                   title="Transactions This Month"
                   transactions={transactions}
+                  edit={false}
                 />
               </div>
             </div>

@@ -32,7 +32,7 @@ export async function getServerSideProps(context) {
   // console.log(categories.data.categories)
 
   const categories = await prisma.category.findMany();
-  
+
   return {
     props: {
       user: user,

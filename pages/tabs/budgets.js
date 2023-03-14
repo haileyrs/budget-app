@@ -13,21 +13,28 @@ export async function getServerSideProps(context) {
     where: { email: session.user.email }
   });
 
-  // only pull budgets where month and year are this month and year
-  const budgets = await prisma.budget.findMany({
-    where: { userId: user.id },
+  let today = new Date();
+  let y = today.getFullYear();
+  let m = today.getMonth();
+
+  const currentBudgets = await prisma.budget.findMany({
+    where: {
+      AND: [{ userId: user.id }, { month: m }, { year: y }]
+    },
     include: {
       category: {
         select: { name: true }
       }
-    },
+    }
   });
   const categories = await prisma.category.findMany();
-  console.log(budgets)
+  console.log(currentBudgets)
+
+  const filteredCategories = categories.filter((c) => c.name != 'Income');
   return {
     props: {
-      budgets: budgets,
-      categories: categories,
+      budgets: currentBudgets,
+      categories: filteredCategories,
       user: user
     }
   };
@@ -37,6 +44,11 @@ export default function Budgets({ budgets, categories, user }) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
+    const budgetCategories = budgets.map(b => b.category.name)
+    const availableCategories = categories.filter(
+      (c) => !budgetCategories.includes(c.name)
+    );
+
     return (
       <>
         <Head>
@@ -71,7 +83,6 @@ export default function Budgets({ budgets, categories, user }) {
             </div>
 
             <div className="flex flex-col">
-              {/* for budget in list of budgets */}
               {budgets.map((budget) => (
                 <div key={budget.id} className="w-full">
                   <BudgetWidget
@@ -84,7 +95,7 @@ export default function Budgets({ budgets, categories, user }) {
                 </div>
               ))}
             </div>
-            <AddBudget user={user} categories={categories} />
+            <AddBudget user={user} categories={availableCategories} />
           </main>
         </InternalNavBar>
       </>

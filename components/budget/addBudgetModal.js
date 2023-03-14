@@ -43,7 +43,6 @@ export default function AddBudget({ user, categories }) {
                 required
               >
                 <option disabled>category</option>
-                {/* exclude options that are already in use */}
                 {categories.map((c) => (
                   <option key={c.id}>{c.name}</option>
                 ))}

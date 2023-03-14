@@ -16,7 +16,7 @@ export default function BudgetWidget({ id, name, value, max, user }) {
             </div>
             <div className="flex prose">
               <p>
-                ${value} of ${max}
+                ${value.toFixed(2)} of ${max.toFixed(2)}
               </p>
             </div>
           </div>
@@ -28,10 +28,12 @@ export default function BudgetWidget({ id, name, value, max, user }) {
           ></progress>
           <div className={styles.topdiv}>
             <div className="flex prose">
-              <p>${remaining} Left </p>
+              <p>${remaining.toFixed(2)} Left </p>
             </div>
-            <div className='flex'>
-              <label htmlFor={id} className="btn btn-sm btn-primary">Edit</label>
+            <div className="flex">
+              <label htmlFor={id} className="btn btn-sm btn-primary">
+                Edit
+              </label>
             </div>
           </div>
         </div>

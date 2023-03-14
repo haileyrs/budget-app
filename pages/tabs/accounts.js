@@ -37,6 +37,7 @@ export default function Accounts({ accounts, user }) {
     );
     const property = accounts.filter((a) => a.type == 'Property');
     const credit = accounts.filter((a) => a.type == 'Credit');
+    const loans = accounts.filter((a) => a.type == 'Loan');
     
     return (
       <>
@@ -76,7 +77,7 @@ export default function Accounts({ accounts, user }) {
                       <a>Use Plaid</a>
                     </li>
                   </label>
-    
+
                   <label htmlFor="add-account-modal">
                     <li>
                       <a className="justify-between">Add Manually</a>
@@ -90,7 +91,7 @@ export default function Accounts({ accounts, user }) {
                 Click on an account card to update it.
               </p>
             </div>
-    
+
             {/* <article className='prose pl-3'>
                 <h2>Checking & Savings</h2>
               </article> */}
@@ -143,6 +144,21 @@ export default function Accounts({ accounts, user }) {
                   name={account.name}
                   amount={account.value}
                   updatedDate={account.lastUpdated}
+                  negative={true}
+                />
+              ))}
+            </div>
+            <div className="account-group">
+              <div className="divider">Loans</div>
+              {loans.map((account) => (
+                <AccountWidget
+                  key={account.id}
+                  id={account.id}
+                  type={account.type}
+                  name={account.name}
+                  amount={account.value}
+                  updatedDate={account.lastUpdated}
+                  negative={true}
                 />
               ))}
             </div>

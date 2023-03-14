@@ -34,7 +34,7 @@ export default function TransactionTable({
                     {t.month}/{t.day}/{t.year}
                   </th>
                   <td>{t.category.name}</td>
-                  <td>${t.amount}</td>
+                  <td>{t.amount.toFixed(2)}</td>
                   <td>{t.moneyAccount.name}</td>
                   <td>{t.vendor}</td>
                   <td>

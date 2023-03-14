@@ -12,6 +12,11 @@ export default function AddAccount({ user }) {
         type: event.target.type.value,
         value: parseFloat(event.target.amount.value)
       };
+      if (data.type == 'Loan' || data.type == 'Credit') {
+        if (data.value > 0) {
+          data.value *= -1
+        }
+      }
       const response = await fetch(`/api/moneyAccount`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -53,9 +58,10 @@ export default function AddAccount({ user }) {
                 <option disabled>account type</option>
                 <option>Checking</option>
                 <option>Savings</option>
-                <option>Credit</option>
                 <option>Investment</option>
                 <option>Property</option>
+                <option>Credit</option>
+                <option>Loan</option>
               </select>
             </div>
             <div className={styles.dollar}>

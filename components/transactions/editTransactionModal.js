@@ -57,6 +57,12 @@ export default function EditTransaction({
         data.categoryId = newCategory.id;
       }
 
+      if (event.target.category.value != 'Income' && category != 'Income') {
+        if (data.amount > 0) {
+          data.amount *= -1;
+        }
+      }
+
       const response = await fetch(`/api/transaction`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -128,7 +134,7 @@ export default function EditTransaction({
                 type="text"
                 id="amount"
                 name="amount"
-                placeholder={amount}
+                placeholder={amount.toFixed(2)}
                 className="input input-bordered input-primary w-full max-w-xs"
               />
             </div>
@@ -142,7 +148,7 @@ export default function EditTransaction({
               />
             </div>
             <div className={styles.inputdiv}>
-              <div className='flex'>
+              <div className="flex">
                 <input
                   type="number"
                   id="month"
@@ -158,7 +164,7 @@ export default function EditTransaction({
                   className="input input-bordered input-primary w-full max-w-xs"
                 />
               </div>
-            </div>  
+            </div>
             <div className={styles.inputdiv}>
               <input
                 type="number"

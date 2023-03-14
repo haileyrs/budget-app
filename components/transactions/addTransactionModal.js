@@ -6,19 +6,24 @@ export default function AddTransaction({ user, categories, accounts }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const account = accounts.find(e => e.name == event.target.account.value)
-      const category = categories.find(
+      const newAccount = accounts.find(e => e.name == event.target.account.value)
+      const newCategory = categories.find(
         (e) => e.name == event.target.category.value
       );
       const data = {
         vendor: event.target.vendor.value,
         amount: parseFloat(event.target.amount.value),
-        categoryId: category.id,
-        moneyAccountId: account.id,
+        categoryId: newCategory.id,
+        moneyAccountId: newAccount.id,
         month: parseInt(event.target.month.value) - 1,
         day: parseInt(event.target.day.value),
         year: parseInt(event.target.year.value)
       };
+      if (event.target.category.value != 'Income') {
+        if (data.amount > 0) {
+          data.amount *= -1;
+        }
+      }
       const response = await fetch(`/api/transaction`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

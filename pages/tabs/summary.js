@@ -86,7 +86,9 @@ export default function Summary({ user, accounts, budgets, transactions }) {
           <main>
             <div className="flex flex-row" id="title-div">
               <article className="prose">
-                <h1>Welcome, {user.displayName ? user.displayName : user.name }!</h1>
+                <h1>
+                  Welcome, {user.displayName ? user.displayName : user.name}!
+                </h1>
               </article>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3">
@@ -99,7 +101,7 @@ export default function Summary({ user, accounts, budgets, transactions }) {
 
                 <div className="stat">
                   <div className="stat-title">Monthly Spend</div>
-                  <div className="stat-value">${spent}</div>
+                  <div className="stat-value">${spent.toFixed(2)}</div>
                   <div className="stat-desc">{monthRange}</div>
                 </div>
 
@@ -123,7 +125,10 @@ export default function Summary({ user, accounts, budgets, transactions }) {
                 </div>
               </div>
               <div className="pt-4 md:col-span-3">
-                <TransactionTable title="Transactions This Month" transactions={transactions} />
+                <TransactionTable
+                  title="Transactions This Month"
+                  transactions={transactions}
+                />
               </div>
             </div>
           </main>

@@ -16,6 +16,11 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
         type: type,
         value: event.target.amount.value != '' ? parseFloat(event.target.amount.value) : amount
       };
+      if (data.type == 'Loan' || data.type == 'Credit') {
+        if (data.value > 0) {
+          data.value *= -1;
+        }
+      }
       const response = await fetch(`/api/moneyAccount`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -75,7 +80,7 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
                 type="text"
                 id="amount"
                 name="amount"
-                placeholder={amount}
+                placeholder={amount.toFixed(2)}
                 className="input input-bordered input-primary w-full max-w-xs"
               />
             </div>

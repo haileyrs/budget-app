@@ -62,7 +62,7 @@ export default function EditBudget({ id, name, amount }) {
                 type="text"
                 id="amount"
                 name="amount"
-                placeholder={amount}
+                placeholder={amount.toFixed(2)}
                 className="input input-bordered input-primary w-full max-w-xs"
                 required
               />

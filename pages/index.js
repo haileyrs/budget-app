@@ -31,7 +31,7 @@ export default function Home() {
                   <div className="display">
                     <div className="artboard artboard-demo bg-neutral phone-1">
                       <Image
-                        src="/../public/images/phone.png"
+                        src="/images/phone.png"
                         alt="Screenshot of Application Page on mobile"
                         width={350}
                         height={675}
@@ -49,7 +49,7 @@ export default function Home() {
                 <div className="mockup-window border bg-base-300">
                   <div className="flex justify-center bg-base-200">
                     <Image
-                      src="/../public/images/budgetScreen.png"
+                      src="/images/budgetScreen.png"
                       alt="Screenshot of Internal Application Page on desktop"
                       width={600}
                       height={500}
@@ -71,7 +71,7 @@ export default function Home() {
                 <div className="mockup-window border bg-base-300">
                   <div className="flex justify-center bg-base-200">
                     <Image
-                      src="/../public/images/accountScreen.png"
+                      src="/images/accountScreen.png"
                       alt="Screenshot of Internal Application Page on desktop"
                       width={600}
                       height={500}
@@ -93,7 +93,7 @@ export default function Home() {
                 <div className="mockup-window border bg-base-300">
                   <div className="flex justify-center bg-base-200">
                     <Image
-                      src="/../public/images/accountScreen.png"
+                      src="/images/accountScreen.png"
                       alt="Screenshot of Internal Application Page on desktop"
                       width={600}
                       height={500}

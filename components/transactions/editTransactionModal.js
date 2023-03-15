@@ -1,7 +1,9 @@
 import Modal from '../modalTemplate';
 import ErrorMessage from '../errorMessage';
 import styles from './transaction.module.css';
+import { useState } from 'react';
 import Router from 'next/router';
+import DatePicker from 'tailwind-datepicker-react';
 
 export default function EditTransaction({
   id,
@@ -97,6 +99,34 @@ export default function EditTransaction({
     }
   };
 
+  const handleDate = (selectedDate) => {
+    console.log(selectedDate)
+  }
+
+  const [show, setShow] = useState(false);
+  const options = {
+    autoHide: true,
+    todayBtn: false,
+    clearBtn: true,
+    maxDate: new Date('2030-01-01'),
+    minDate: new Date('1950-01-01'),
+    theme: {
+      background: '',
+      todayBtn: '',
+      clearBtn:
+        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content',
+      icons: '',
+      text: '',
+      disabledText: 'dark:text-base-300',
+      input: '',
+      inputIcon: '',
+      selected:
+        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content'
+    },
+    defaultDate: new Date(),
+    language: 'en'
+  };
+
   return (
     <>
       <Modal title="Update Transaction" control={id}>
@@ -145,6 +175,14 @@ export default function EditTransaction({
                 name="vendor"
                 placeholder={vendor}
                 className="input input-bordered input-primary w-full max-w-xs"
+              />
+            </div>
+            <div className={styles.inputdiv}>
+              <DatePicker
+                show={show}
+                setShow={(state) => setShow(state)}
+                options={options}
+                onChange={handleDate}
               />
             </div>
             <div className={styles.inputdiv}>

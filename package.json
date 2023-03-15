@@ -22,7 +22,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-plaid-link": "^3.4.0",
-    "sqlite3": "^5.1.4"
+    "sqlite3": "^5.1.4",
+    "tailwind-datepicker-react": "^1.2.3"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",

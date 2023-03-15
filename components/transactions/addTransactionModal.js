@@ -1,6 +1,8 @@
 import Modal from '../modalTemplate';
 import styles from './transaction.module.css';
+import { useState } from 'react';
 import Router from 'next/router';
+import DatePicker from 'tailwind-datepicker-react';
 
 export default function AddTransaction({ user, categories, accounts }) {
   const handleSubmit = async (event) => {
@@ -37,6 +39,34 @@ export default function AddTransaction({ user, categories, accounts }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleDate = (selectedDate) => {
+    console.log(selectedDate)
+  }
+
+  const [show, setShow] = useState(false);
+  const options = {
+    autoHide: true,
+    todayBtn: false,
+    clearBtn: true,
+    maxDate: new Date('2030-01-01'),
+    minDate: new Date('1950-01-01'),
+    theme: {
+      background: '',
+      todayBtn: '',
+      clearBtn:
+        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content',
+      icons: '',
+      text: '',
+      disabledText: 'dark:text-base-300',
+      input: '',
+      inputIcon: '',
+      selected:
+        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content'
+    },
+    defaultDate: new Date(),
+    language: 'en'
   };
 
   return (
@@ -96,7 +126,24 @@ export default function AddTransaction({ user, categories, accounts }) {
               />
             </div>
             <div className={styles.inputdiv}>
-              <div className='flex'>
+              <DatePicker
+                show={show}
+                setShow={(state) => setShow(state)}
+                options={options}
+                onChange={handleDate}
+              />
+              {/* <div>
+                <input
+                  type="text"
+                  placeholder="Select Date"
+                  onFocus={() => setShow(true)}
+                  readOnly
+                  className="input input-bordered input-primary w-full max-w-xs"
+                />
+              </div> */}
+            </div>
+            <div className={styles.inputdiv}>
+              <div className="flex">
                 <input
                   type="number"
                   id="month"
@@ -114,7 +161,7 @@ export default function AddTransaction({ user, categories, accounts }) {
                   required
                 />
               </div>
-            </div>  
+            </div>
             <div className={styles.inputdiv}>
               <input
                 type="number"

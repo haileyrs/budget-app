@@ -61,6 +61,7 @@ export default function Summary({ user, accounts, budgets, transactions }) {
     let max = 0;
     let spent = 0;
     let monthRange = "";
+    let monthSpend = 0;
 
     const today = new Date();
     const month = today.toLocaleString('default', { month: 'long' });
@@ -71,13 +72,21 @@ export default function Summary({ user, accounts, budgets, transactions }) {
       netWorth = parseInt(netWorth);
     }
 
-    if (budgets.length) {
-      budgets.forEach((b) => (max += b.max));
-      budgets.forEach((b) => (spent += b.value));
-      budgets.forEach((b) => (budgetLeft += b.max - b.value));
-      budgetPercent = parseInt((spent / max) * 100);
-      budgetLeft = parseInt(budgetLeft);
-    }
+    // if (budgets.length) {
+    //   budgets.forEach((b) => (max += b.max));
+    //   budgets.forEach((b) => (spent += b.value));
+    //   budgets.forEach((b) => (budgetLeft += b.max - b.value));
+    //   budgetPercent = parseInt((spent / max) * 100);
+    //   budgetLeft = parseInt(budgetLeft);
+    // }
+
+    if (transactions.length) {
+      transactions.forEach((t => {
+        if (t.amount < 0) {
+          monthSpend += t.amount * -1;
+        }
+      }))
+    };
 
     return (
       <>
@@ -103,7 +112,7 @@ export default function Summary({ user, accounts, budgets, transactions }) {
 
                 <div className="stat">
                   <div className="stat-title">Monthly Spend</div>
-                  <div className="stat-value">${spent.toFixed(2)}</div>
+                  <div className="stat-value">${monthSpend.toFixed(2)}</div>
                   <div className="stat-desc">{monthRange}</div>
                 </div>
 

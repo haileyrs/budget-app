@@ -1,5 +1,7 @@
 import InternalNavBar from '@/components/nav/internalNav';
 import Head from 'next/head'
+import DatePicker from 'tailwind-datepicker-react';
+import { useState } from 'react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
@@ -24,6 +26,39 @@ export async function getServerSideProps(context) {
 
 export default function Export({ accounts, user }) {
   const { data: session, status } = useSession({ required: true });
+
+  const handleDate1 = (selectedDate) => {
+    console.log(selectedDate);
+  };
+
+  const handleDate2 = (selectedDate) => {
+    console.log(selectedDate);
+  };
+
+  const [show1, setShow1] = useState(false);
+  const [show2, setShow2] = useState(false);
+  const options = {
+    autoHide: true,
+    todayBtn: false,
+    clearBtn: true,
+    maxDate: new Date('2030-01-01'),
+    minDate: new Date('1950-01-01'),
+    theme: {
+      background: '',
+      todayBtn: '',
+      clearBtn:
+        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content',
+      icons: '',
+      text: '',
+      disabledText: 'dark:text-base-300',
+      input: '',
+      inputIcon: '',
+      selected:
+        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content'
+    },
+    defaultDate: new Date(),
+    language: 'en'
+  };
 
   if (status == 'authenticated') {
     return (
@@ -58,55 +93,19 @@ export default function Export({ accounts, user }) {
               <div className="flex space-x-4">
                 <p>Date Range</p>
                 <div className="form-control">
-                  <div className="input-group">
-                    <button className="btn btn-square">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
-                        />
-                      </svg>
-                    </button>
-                    <input
-                      type="text"
-                      placeholder="Date"
-                      className="input input-bordered"
-                    />
-                  </div>
-                </div>
-                <p>TO</p>
-                <div className="form-control">
-                  <div className="input-group">
-                    <button className="btn btn-square">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
-                        />
-                      </svg>
-                    </button>
-                    <input
-                      type="text"
-                      placeholder="Date"
-                      className="input input-bordered"
-                    />
-                  </div>
+                  <DatePicker
+                    show={show1}
+                    setShow={(state) => setShow1(state)}
+                    options={options}
+                    onChange={handleDate1}
+                  />
+                  <p>TO</p>
+                  <DatePicker
+                    show={show2}
+                    setShow={(state) => setShow2(state)}
+                    options={options}
+                    onChange={handleDate2}
+                  />
                 </div>
               </div>
               <p>Accounts</p>
@@ -124,6 +123,4 @@ export default function Export({ accounts, user }) {
       </>
     );
   }
-
-  
 }

@@ -22,6 +22,8 @@ main {
 
 /* PAGES - GENERAL */
 #title-div {
+  display: flex;
+  flex-direction: row;
   padding: 0px 8px 16px 0px;
   align-items: center;
 }

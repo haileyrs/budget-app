@@ -95,7 +95,7 @@ export default function Summary({ user, accounts, budgets, transactions }) {
         </Head>
         <InternalNavBar user={user}>
           <main>
-            <div className="flex flex-row" id="title-div">
+            <div id="title-div">
               <article className="prose">
                 <h1>
                   Welcome, {user.displayName ? user.displayName : user.name}!

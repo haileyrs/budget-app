@@ -46,7 +46,7 @@ export default function Accounts({ accounts, user }) {
         </Head>
         <InternalNavBar user={user}>
           <main>
-            <div className="flex flex-row" id="title-div">
+            <div id="title-div">
               <article className="prose">
                 <h1>Accounts</h1>
               </article>

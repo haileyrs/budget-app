@@ -4,11 +4,13 @@ import InternalNavBar from '@/components/nav/internalNav';
 import Head from 'next/head';
 import Router from 'next/router';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]';
+import { authOptions } from '../../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import prisma from '@/lib/prisma';
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context, params) {
+  console.log(context)
+  console.log(params)
   const session = await getServerSession(context.req, context.res, authOptions);
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
@@ -20,7 +22,7 @@ export async function getServerSideProps(context) {
 
   const currentBudgets = await prisma.budget.findMany({
     where: {
-      AND: [{ userId: user.id }, { month: m }, { year: y }]
+      AND: [{ userId: user.id }, { month: parseInt(context?.params?.month) }, { year: y }]
     },
     include: {
       category: {
@@ -41,21 +43,39 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Budgets({ budgets, categories, user }) {
+export default function BudgetHistory({ budgets, categories, user }) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
-    const month = 1;
-    const getHistory = (e) => {
+    const goBack = (e) => {
       e.preventDefault();
-      const sendMonth = month;
-      Router.push('/tabs/budgets/[month]', `/tabs/budgets/${sendMonth}`);
+      const currentMonth = 1
+      const month = currentMonth - 1
+      // need to add year to url if possible to have two variables(year/month)
+      // pass month as a prop
+      Router.push('/tabs/budgets/[month]', `/tabs/budgets/${month}`);
+    };
+
+    const goForward = (e) => {
+      e.preventDefault();
+      const currentMonth = 1;
+      const month = currentMonth + 1;
+      const year = 2023
+      if (month == new Date().getMonth() && year == 2023) {
+        Router.push('/tabs/budgets')
+      } else {
+        // need to add year to url if possible to have two variables(year/month)
+        // pass month as a prop
+        Router.push('/tabs/budgets/[month]', `/tabs/budgets/${month}`);
+      }
     };
 
     const budgetCategories = budgets.map((b) => b.category.name);
     const availableCategories = categories.filter(
       (c) => !budgetCategories.includes(c.name)
     );
+
+    const monthView = new Date().getMonth();
 
     return (
       <>
@@ -95,29 +115,36 @@ export default function Budgets({ budgets, categories, user }) {
                   <h3>Month, 2023</h3>
                 </article>
                 <button
-                  onClick={(e) => getHistory(e)}
-                  className="ml-3 btn btn-sm btn-circle"
+                  onClick={(e) => goBack(e)}
+                  className="ml-2 btn btn-sm btn-circle"
                 >
                   ❮
                 </button>
-                <button disabled className="mx-2 btn btn-sm btn-circle">
+                <button
+                  onClick={(e) => goForward(e)}
+                  className="mx-2 btn btn-sm btn-circle"
+                >
                   ❯
                 </button>
               </div>
             </div>
 
             <div className="flex flex-col">
-              {budgets.map((budget) => (
-                <div key={budget.id} className="w-full">
-                  <BudgetWidget
-                    key={budget.id}
-                    id={budget.id}
-                    name={budget.category.name}
-                    value={budget.value}
-                    max={budget.max}
-                  />
-                </div>
-              ))}
+              {budgets.length == 0 ? (
+                <p>There is no budget history for this month</p>
+              ) : (
+                budgets.map((budget) => (
+                  <div key={budget.id} className="w-full">
+                    <BudgetWidget
+                      key={budget.id}
+                      id={budget.id}
+                      name={budget.category.name}
+                      value={budget.value}
+                      max={budget.max}
+                    />
+                  </div>
+                ))
+              )}
             </div>
             <AddBudget user={user} categories={availableCategories} />
           </main>

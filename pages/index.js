@@ -61,7 +61,8 @@ export default function Home() {
                 <article className="prose">
                   <h1>Create Budgets</h1>
                   <h3>
-                    Create budgets and add transactions to track spending in customizable categories.
+                    Create budgets and add transactions to track spending in
+                    customizable categories.
                   </h3>
                 </article>
               </div>
@@ -83,7 +84,8 @@ export default function Home() {
                 <article className="prose">
                   <h1>Monitor Account Balances</h1>
                   <h3>
-                    Add your financial accounts for an organized view of your net worth.
+                    Add your financial accounts for an organized view of your
+                    net worth.
                   </h3>
                 </article>
               </div>
@@ -104,8 +106,11 @@ export default function Home() {
               <div className="flex items-center p-2">
                 <article className="prose">
                   <h1>Export Your Data</h1>
+                  <h2><em>Coming Soon</em></h2>
                   <h3>
-                    Seamlessly export your data to csv, or into a format used to create a sankey diagram using an external site. Simply select your timeframe and the accounts you want to include.
+                    Seamlessly export your data to csv, or into a format used to
+                    create a sankey diagram using an external site. Simply
+                    select your timeframe and the accounts you want to include.
                   </h3>
                 </article>
               </div>

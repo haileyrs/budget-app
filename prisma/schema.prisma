@@ -94,9 +94,7 @@ model Transaction {
   id             Int          @id @default(autoincrement())
   vendor         String
   amount         Float
-  day            Int
-  month          Int
-  year           Int
+  date           String
   category       Category     @relation(fields: [categoryId], references: [id])
   categoryId     Int
   moneyAccount   MoneyAccount @relation(fields: [moneyAccountId], references: [id])

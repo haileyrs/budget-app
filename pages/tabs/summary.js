@@ -12,7 +12,7 @@ export async function getServerSideProps(context) {
   console.log(session)
   let today = new Date();
   let y = today.getFullYear();
-  let m = today.getMonth() + 1;
+  let m = today.getMonth();
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
   });
   const transactions = await prisma.transaction.findMany({
     where: {
-      AND: [{ moneyAccountId: { in: accounts.map((e) => e.id) } }, { month: m }, { year: y }]
+      AND: [{ moneyAccountId: { in: accounts.map((e) => e.id) } }]
     },
     include: {
       category: {
@@ -39,7 +39,7 @@ export async function getServerSideProps(context) {
     }
   });
 
-  transactions.sort((t, a) => a.day - t.day);
+  // transactions.sort((t, a) => a.day - t.day);
 
   return {
     props: {

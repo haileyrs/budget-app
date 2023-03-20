@@ -5,18 +5,17 @@ import { useRouter } from 'next/router';
 
 export default function InternalNavBar({ children, user }) {
   const router = useRouter();
-  const budgetActiveClass = () => {
+  const activeClass = (exact, path) => {
     let activeC = '';
-    router.pathname.includes('/tabs/budgets')
-      ? (activeC = 'bg-primary')
-      : (activeC = 'text-neutral-content');
-    return activeC;
-  };
-  const activeClass = (path) => {
-    let activeC = '';
-    router.pathname == path
-      ? (activeC = 'bg-primary')
-      : (activeC = 'text-neutral-content');
+    if (exact) {
+      router.pathname == path
+        ? (activeC = 'bg-primary')
+        : (activeC = 'text-neutral-content');
+    } else {
+      router.pathname.includes(path)
+        ? (activeC = 'bg-primary')
+        : (activeC = 'text-neutral-content');
+    };
     return activeC;
   };
 
@@ -48,7 +47,7 @@ export default function InternalNavBar({ children, user }) {
             </div>
             <div className="flex-1">
               <button className="btn btn-ghost normal-case text-xl">
-                <Link href="/tabs/summary">Bad Title</Link>
+                <Link href="/tabs/summary">Budgie</Link>
               </button>
             </div>
             {/* theme switch */}
@@ -98,20 +97,23 @@ export default function InternalNavBar({ children, user }) {
           <ul className="menu p-4 w-80 text-base-content bg-neutral">
             <li>
               <Link
-                className={activeClass('/tabs/summary')}
+                className={activeClass(true, '/tabs/summary')}
                 href="/tabs/summary/"
               >
                 Summary
               </Link>
             </li>
             <li>
-              <Link className={budgetActiveClass()} href="/tabs/budgets/">
+              <Link
+                className={activeClass(false, '/tabs/budgets')}
+                href="/tabs/budgets/"
+              >
                 Budgets
               </Link>
             </li>
             <li>
               <Link
-                className={activeClass('/tabs/transactions')}
+                className={activeClass(true, '/tabs/transactions')}
                 href="/tabs/transactions/"
               >
                 Transactions
@@ -119,20 +121,20 @@ export default function InternalNavBar({ children, user }) {
             </li>
             <li>
               <Link
-                className={activeClass('/tabs/accounts')}
+                className={activeClass(true, '/tabs/accounts')}
                 href="/tabs/accounts/"
               >
                 Accounts
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
-                className={activeClass('/tabs/export')}
+                className={activeClass(true, '/tabs/export')}
                 href="/tabs/export/"
               >
                 Export
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>

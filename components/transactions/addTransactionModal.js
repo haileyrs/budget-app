@@ -17,9 +17,7 @@ export default function AddTransaction({ user, categories, accounts }) {
         amount: parseFloat(event.target.amount.value),
         categoryId: newCategory.id,
         moneyAccountId: newAccount.id,
-        month: parseInt(event.target.month.value),
-        day: parseInt(event.target.day.value),
-        year: parseInt(event.target.year.value)
+        date: selectedDate ? selectedDate : new Date().toISOString()
       };
       if (event.target.category.value != 'Income') {
         if (data.amount > 0) {
@@ -40,12 +38,12 @@ export default function AddTransaction({ user, categories, accounts }) {
       console.log(error);
     }
   };
-
-  const handleDate = (selectedDate) => {
-    console.log(selectedDate)
-  }
-
-  const [show, setShow] = useState(false);
+  
+  const [show, setShow] = useState(false);  
+  const [selectedDate, setSelectedDate] = useState()
+  const handleChange = (selectedDate) => {
+    setSelectedDate(selectedDate)
+  };
   const options = {
     autoHide: true,
     todayBtn: false,
@@ -59,8 +57,8 @@ export default function AddTransaction({ user, categories, accounts }) {
         'bg-primary text-primary-content dark:bg-primary dark:text-primary-content',
       icons: '',
       text: '',
-      disabledText: 'dark:text-base-300',
-      input: '',
+      disabledText: 'text-secondary dark:text-secondary',
+      input: 'bg-base-100 text-neutral border-primary dark:bg-base-100 dark:text-neutral dark:border-primary',
       inputIcon: '',
       selected:
         'bg-primary text-primary-content dark:bg-primary dark:text-primary-content'
@@ -130,7 +128,7 @@ export default function AddTransaction({ user, categories, accounts }) {
                 show={show}
                 setShow={(state) => setShow(state)}
                 options={options}
-                onChange={handleDate}
+                onChange={handleChange}
               />
               {/* <div>
                 <input
@@ -142,7 +140,7 @@ export default function AddTransaction({ user, categories, accounts }) {
                 />
               </div> */}
             </div>
-            <div className={styles.inputdiv}>
+            {/* <div className={styles.inputdiv}>
               <div className="flex">
                 <input
                   type="number"
@@ -171,7 +169,7 @@ export default function AddTransaction({ user, categories, accounts }) {
                 className="input input-bordered input-primary w-full max-w-xs"
                 required
               />
-            </div>
+            </div> */}
           </div>
           <div className="modal-action m-0">
             <button className="btn" type="submit">

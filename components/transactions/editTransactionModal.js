@@ -11,9 +11,7 @@ export default function EditTransaction({
   amount,
   moneyAccount,
   vendor,
-  month,
-  day,
-  year,
+  date,
   accounts,
   categories
 }) {
@@ -33,18 +31,8 @@ export default function EditTransaction({
             : amount,
         categoryId: category.id,
         moneyAccountId: moneyAccount.id,
-        month:
-          event.target.month.value != ''
-            ? parseInt(event.target.month.value)
-            : month,
-        day:
-          event.target.day.value != '' ? parseInt(event.target.day.value) : day,
-        year:
-          event.target.year.value != ''
-            ? parseInt(event.target.year.value)
-            : year
+        date: selectedDate ? selectedDate : date
       };
-
       if (event.target.account.value != '') {
         const newAccount = accounts.find(
           (e) => e.name == event.target.account.value
@@ -99,11 +87,11 @@ export default function EditTransaction({
     }
   };
 
-  const handleDate = (selectedDate) => {
-    console.log(selectedDate)
-  }
-
   const [show, setShow] = useState(false);
+  const [selectedDate, setSelectedDate] = useState();
+  const handleChange = (selectedDate) => {
+    setSelectedDate(selectedDate);
+  };
   const options = {
     autoHide: true,
     todayBtn: false,
@@ -117,13 +105,14 @@ export default function EditTransaction({
         'bg-primary text-primary-content dark:bg-primary dark:text-primary-content',
       icons: '',
       text: '',
-      disabledText: 'dark:text-base-300',
-      input: '',
+      disabledText: 'text-secondary dark:text-secondary',
+      input:
+        'bg-base-100 text-neutral border-primary dark:bg-base-100 dark:text-neutral dark:border-primary',
       inputIcon: '',
       selected:
         'bg-primary text-primary-content dark:bg-primary dark:text-primary-content'
     },
-    defaultDate: new Date(),
+    defaultDate: new Date(date),
     language: 'en'
   };
 
@@ -182,10 +171,10 @@ export default function EditTransaction({
                 show={show}
                 setShow={(state) => setShow(state)}
                 options={options}
-                onChange={handleDate}
+                onChange={handleChange}
               />
             </div>
-            <div className={styles.inputdiv}>
+            {/* <div className={styles.inputdiv}>
               <div className="flex">
                 <input
                   type="number"
@@ -211,7 +200,7 @@ export default function EditTransaction({
                 placeholder={year}
                 className="input input-bordered input-primary w-full max-w-xs"
               />
-            </div>
+            </div> */}
           </div>
           {apiErr ? <ErrorMessage message={errMessage} /> : ''}
 

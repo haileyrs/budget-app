@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'POST') {
-      const { vendor, amount, categoryId, moneyAccountId, month, day, year } = req.body;
+      const { vendor, amount, categoryId, moneyAccountId, date } = req.body;
       // do value math on this side by checking transactions
       const result = await prisma.transaction.create({
         data: {
@@ -43,16 +43,14 @@ export default async function handler(req, res) {
           amount: amount,
           categoryId: categoryId,
           moneyAccountId: moneyAccountId,
-          month: month,
-          day: day,
-          year: year
+          date: date
         }
       });
       res.status(201).json(result);
     }
 
     if (req.method == 'PUT') {
-      const { transactionId, vendor, amount, categoryId, moneyAccountId, month, day, year } = req.body;
+      const { transactionId, vendor, amount, categoryId, moneyAccountId, date } = req.body;
       const updatetransaction = await prisma.transaction.update({
         where: {
           id: transactionId
@@ -62,9 +60,7 @@ export default async function handler(req, res) {
           amount: amount,
           categoryId: categoryId,
           moneyAccountId: moneyAccountId,
-          month: month,
-          day: day,
-          year: year
+          date: date
         }
       });
       res.status(201).json(updatetransaction);

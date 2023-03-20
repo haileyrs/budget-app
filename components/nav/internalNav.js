@@ -5,7 +5,13 @@ import { useRouter } from 'next/router';
 
 export default function InternalNavBar({ children, user }) {
   const router = useRouter();
-
+  const budgetActiveClass = () => {
+    let activeC = '';
+    router.pathname.includes('/tabs/budgets')
+      ? (activeC = 'bg-primary')
+      : (activeC = 'text-neutral-content');
+    return activeC;
+  };
   const activeClass = (path) => {
     let activeC = '';
     router.pathname == path
@@ -99,10 +105,7 @@ export default function InternalNavBar({ children, user }) {
               </Link>
             </li>
             <li>
-              <Link
-                className={activeClass('/tabs/budgets')}
-                href="/tabs/budgets/"
-              >
+              <Link className={budgetActiveClass()} href="/tabs/budgets/">
                 Budgets
               </Link>
             </li>
@@ -133,7 +136,7 @@ export default function InternalNavBar({ children, user }) {
           </ul>
         </div>
       </div>
-      <ProfileModal user={user}/>
+      <ProfileModal user={user} />
       <LogoutModal />
     </>
   );

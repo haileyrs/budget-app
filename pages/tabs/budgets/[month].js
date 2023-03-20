@@ -8,9 +8,8 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import prisma from '@/lib/prisma';
 
-export async function getServerSideProps(context, params) {
+export async function getServerSideProps(context) {
   console.log(context)
-  console.log(params)
   const session = await getServerSession(context.req, context.res, authOptions);
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
@@ -19,10 +18,11 @@ export async function getServerSideProps(context, params) {
   let today = new Date();
   let y = today.getFullYear();
   let m = today.getMonth();
+  let pageMonth = parseInt(context?.params?.month)
 
   const currentBudgets = await prisma.budget.findMany({
     where: {
-      AND: [{ userId: user.id }, { month: parseInt(context?.params?.month) }, { year: y }]
+      AND: [{ userId: user.id }, { month: pageMonth }, { year: y }]
     },
     include: {
       category: {
@@ -38,44 +38,45 @@ export async function getServerSideProps(context, params) {
     props: {
       budgets: currentBudgets,
       categories: filteredCategories,
-      user: user
+      user: user,
+      pageMonth: pageMonth
     }
   };
 }
 
-export default function BudgetHistory({ budgets, categories, user }) {
+export default function BudgetHistory({ budgets, categories, user, pageMonth }) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
     const goBack = (e) => {
       e.preventDefault();
-      const currentMonth = 1
-      const month = currentMonth - 1
+      const month = pageMonth - 1;
+      const year = 2023;
       // need to add year to url if possible to have two variables(year/month)
-      // pass month as a prop
+      // for now you only view budgets in this year
       Router.push('/tabs/budgets/[month]', `/tabs/budgets/${month}`);
     };
 
     const goForward = (e) => {
       e.preventDefault();
-      const currentMonth = 1;
-      const month = currentMonth + 1;
+      const month = pageMonth + 1;
       const year = 2023
-      if (month == new Date().getMonth() && year == 2023) {
+      if (month === new Date().getMonth() && year === 2023) {
         Router.push('/tabs/budgets')
       } else {
         // need to add year to url if possible to have two variables(year/month)
-        // pass month as a prop
+        // for now you only view budgets in this year
         Router.push('/tabs/budgets/[month]', `/tabs/budgets/${month}`);
       }
     };
-
+    let lastMonth = false;
+    if (pageMonth === 0) { lastMonth = true }
     const budgetCategories = budgets.map((b) => b.category.name);
     const availableCategories = categories.filter(
       (c) => !budgetCategories.includes(c.name)
     );
 
-    const monthView = new Date().getMonth();
+    const date = new Date((pageMonth+1) +'/1/2023');
 
     return (
       <>
@@ -112,9 +113,12 @@ export default function BudgetHistory({ budgets, categories, user }) {
               </div>
               <div className="flex self-end place-items-end">
                 <article className="prose">
-                  <h3>Month, 2023</h3>
+                  <h3>
+                    {date.toLocaleString('en-us', { month: 'long' })}, 2023
+                  </h3>
                 </article>
                 <button
+                  disabled={lastMonth}
                   onClick={(e) => goBack(e)}
                   className="ml-2 btn btn-sm btn-circle"
                 >

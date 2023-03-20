@@ -36,19 +36,19 @@ export async function getServerSideProps(context) {
     props: {
       budgets: currentBudgets,
       categories: filteredCategories,
-      user: user
+      user: user,
+      currentMonth: m
     }
   };
 }
 
-export default function Budgets({ budgets, categories, user }) {
+export default function Budgets({ budgets, categories, user, currentMonth }) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
-    const month = 1;
     const getHistory = (e) => {
       e.preventDefault();
-      const sendMonth = month;
+      const sendMonth = currentMonth - 1;
       Router.push('/tabs/budgets/[month]', `/tabs/budgets/${sendMonth}`);
     };
 
@@ -56,6 +56,7 @@ export default function Budgets({ budgets, categories, user }) {
     const availableCategories = categories.filter(
       (c) => !budgetCategories.includes(c.name)
     );
+    const date = new Date();
 
     return (
       <>
@@ -92,7 +93,9 @@ export default function Budgets({ budgets, categories, user }) {
               </div>
               <div className="flex self-end place-items-end">
                 <article className="prose">
-                  <h3>Month, 2023</h3>
+                  <h3>
+                    {date.toLocaleString('en-us', { month: 'long' })}, 2023
+                  </h3>
                 </article>
                 <button
                   onClick={(e) => getHistory(e)}

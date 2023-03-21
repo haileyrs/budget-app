@@ -9,7 +9,6 @@ import { useSession } from 'next-auth/react';
 import prisma from '@/lib/prisma';
 
 export async function getServerSideProps(context) {
-  console.log(context)
   const session = await getServerSession(context.req, context.res, authOptions);
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
@@ -17,8 +16,11 @@ export async function getServerSideProps(context) {
 
   let today = new Date();
   let y = today.getFullYear();
-  let m = today.getMonth();
-  let pageMonth = parseInt(context?.params?.month)
+  let pageMonth = parseInt(context?.params?.month);
+
+  let minDate = y + '-' + (pageMonth + 1) + '-01';
+  let maxDate =
+    pageMonth === 11 ? y + 1 + '-01-01' : y + '-' + (pageMonth + 2) + '-01';
 
   const currentBudgets = await prisma.budget.findMany({
     where: {
@@ -26,25 +28,36 @@ export async function getServerSideProps(context) {
     },
     include: {
       category: {
-        select: { name: true }
+        select: { name: true, id: true }
       }
     }
   });
-  const categories = await prisma.category.findMany();
-  console.log(currentBudgets);
 
+  const transactions = await prisma.transaction.findMany({
+    where: { date: { gte: new Date(minDate), lt: new Date(maxDate) } }
+  });
+
+  const categories = await prisma.category.findMany();
   const filteredCategories = categories.filter((c) => c.name != 'Income');
+
   return {
     props: {
       budgets: currentBudgets,
       categories: filteredCategories,
+      transactions: transactions,
       user: user,
       pageMonth: pageMonth
     }
   };
 }
 
-export default function BudgetHistory({ budgets, categories, user, pageMonth }) {
+export default function BudgetHistory({
+  budgets,
+  categories,
+  transactions,
+  user,
+  pageMonth
+}) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
@@ -60,23 +73,40 @@ export default function BudgetHistory({ budgets, categories, user, pageMonth }) 
     const goForward = (e) => {
       e.preventDefault();
       const month = pageMonth + 1;
-      const year = 2023
+      const year = 2023;
       if (month === new Date().getMonth() && year === 2023) {
-        Router.push('/tabs/budgets')
+        Router.push('/tabs/budgets');
       } else {
         // need to add year to url if possible to have two variables(year/month)
         // for now you only view budgets in this year
         Router.push('/tabs/budgets/[month]', `/tabs/budgets/${month}`);
       }
     };
+
+    const findValues = function (budgetItem) {
+      const categoryId = budgetItem.category.id;
+      let total = 0;
+
+      transactions.forEach((t) => {
+        if (t.categoryId === categoryId) {
+          total += t.amount * -1;
+        }
+      });
+      return total;
+    };
+
+    budgets.forEach((b) => (b.value = findValues(b)));
+
     let lastMonth = false;
-    if (pageMonth === 0) { lastMonth = true }
+    if (pageMonth === 0) {
+      lastMonth = true;
+    }
     const budgetCategories = budgets.map((b) => b.category.name);
     const availableCategories = categories.filter(
       (c) => !budgetCategories.includes(c.name)
     );
 
-    const date = new Date((pageMonth+1) +'/1/2023');
+    const date = new Date(pageMonth + 1 + '/1/2023');
 
     return (
       <>

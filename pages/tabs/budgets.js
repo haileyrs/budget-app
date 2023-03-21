@@ -18,31 +18,44 @@ export async function getServerSideProps(context) {
   let y = today.getFullYear();
   let m = today.getMonth();
 
+  let minDate = y + '-' + (m + 1) + '-01';
+  let maxDate = m === 11 ? y + 1 + '-01-01' : y + '-' + (m + 2) + '-01';
+
   const currentBudgets = await prisma.budget.findMany({
     where: {
       AND: [{ userId: user.id }, { month: m }, { year: y }]
     },
     include: {
       category: {
-        select: { name: true }
+        select: { name: true, id: true }
       }
     }
   });
-  const categories = await prisma.category.findMany();
-  console.log(currentBudgets);
 
+  const transactions = await prisma.transaction.findMany({
+    where: { date: { gte: new Date(minDate), lt: new Date(maxDate) } }
+  });
+
+  const categories = await prisma.category.findMany();
   const filteredCategories = categories.filter((c) => c.name != 'Income');
   return {
     props: {
       budgets: currentBudgets,
       categories: filteredCategories,
+      transactions: transactions,
       user: user,
       currentMonth: m
     }
   };
 }
 
-export default function Budgets({ budgets, categories, user, currentMonth }) {
+export default function Budgets({
+  budgets,
+  categories,
+  transactions,
+  user,
+  currentMonth
+}) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
@@ -51,6 +64,20 @@ export default function Budgets({ budgets, categories, user, currentMonth }) {
       const sendMonth = currentMonth - 1;
       Router.push('/tabs/budgets/[month]', `/tabs/budgets/${sendMonth}`);
     };
+
+    const findValues = function (budgetItem) {
+      const categoryId = budgetItem.category.id;
+      let total = 0;
+
+      transactions.forEach((t) => {
+        if (t.categoryId === categoryId) {
+          total += t.amount * -1;
+        }
+      });
+      return total;
+    };
+
+    budgets.forEach((b) => (b.value = findValues(b)));
 
     const budgetCategories = budgets.map((b) => b.category.name);
     const availableCategories = categories.filter(

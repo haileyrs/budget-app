@@ -25,6 +25,11 @@ export async function getServerSideProps(context) {
   const budgets = await prisma.budget.findMany({
     where: {
       AND: [{ userId: user.id }, { month: m }, { year: y }]
+    },
+    include: {
+      category: {
+        select: { name: true, id: true }
+      }
     }
   });
   const transactions = await prisma.transaction.findMany({
@@ -33,7 +38,7 @@ export async function getServerSideProps(context) {
     },
     include: {
       category: {
-        select: { name: true }
+        select: { name: true, id: true }
       },
       moneyAccount: {
         select: { name: true }
@@ -74,13 +79,18 @@ export default function Summary({ user, accounts, budgets, transactions }) {
       netWorth = parseInt(netWorth);
     }
 
-    // if (budgets.length) {
-    //   budgets.forEach((b) => (max += b.max));
-    //   budgets.forEach((b) => (spent += b.value));
-    //   budgets.forEach((b) => (budgetLeft += b.max - b.value));
-    //   budgetPercent = parseInt((spent / max) * 100);
-    //   budgetLeft = parseInt(budgetLeft);
-    // }
+    if (budgets.length) {
+      let categories = budgets.map((b) => b.category.id);
+      for (const t of transactions) {
+        if (categories.includes(t.category.id)) {
+          spent += t.amount * -1;
+        }
+      }
+      budgets.map((b) => (max += b.max));
+      budgetPercent = parseInt((spent / max) * 100);
+      budgetLeft = parseInt(max - spent);
+    };
+    
 
     if (transactions.length) {
       transactions.forEach((t => {
@@ -128,7 +138,7 @@ export default function Summary({ user, accounts, budgets, transactions }) {
                 <div className="card bg-base-100 shadow-xl">
                   <div className="card-body">
                     <h2 className="card-title">Saved This Month</h2>
-                    <p>${budgetLeft}</p>
+                    <p>I'm not sure what this number should be</p>
                     <div className="card-actions justify-end">
                       <Link href="/tabs/accounts/">
                         <label className="btn">Check It Out</label>

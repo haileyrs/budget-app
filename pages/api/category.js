@@ -2,17 +2,10 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from './auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 
-// get serverside props for page loads
-// add find many
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
 
   if (session) {
-    if (req.method == 'GET') {
-      const categories = await prisma.category.findMany();
-      res.status(200).json(categories);
-    }
-
     if (req.method == 'POST') {
       const { name } = req.body;
       const result = await prisma.category.create({
@@ -46,7 +39,5 @@ export default async function handler(req, res) {
       res.status(201).json(deleteCat);
     }
   }
-
-  res.send(401);
-  
+  res.status(401);
 }

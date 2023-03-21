@@ -24,7 +24,6 @@ export default async function handler(req, res) {
 
     if (req.method == 'POST') {
       const { userId, categoryId, max } = req.body;
-      // do value math on this side by checking transactions
       const result = await prisma.budget.create({
         data: {
           userId: userId,
@@ -61,7 +60,5 @@ export default async function handler(req, res) {
       res.status(201).json(deleteBudget);
     }
   }
-  
   res.status(401);
-  
 }

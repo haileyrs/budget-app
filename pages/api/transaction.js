@@ -2,41 +2,12 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from './auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 
-// get serverside props for page loads
-// add method to find all transactions for user
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
 
   if (session) {
-    if (req.method == 'GET') {
-      const { account, category } = req.body;
-      let transactions = {};
-      if (category) {
-        transactions = await prisma.transaction.findUnique({
-          where: {
-            AND: [
-              {
-                accountId: account
-              },
-              {
-                categoryId: category
-              }
-            ]
-          }
-        });
-      } else {
-        transactions = await prisma.transaction.findMany({
-          where: {
-            accountId: account
-          }
-        });
-      }
-      res.status(200).json(transactions);
-    }
-
     if (req.method == 'POST') {
       const { vendor, amount, categoryId, moneyAccountId, date } = req.body;
-      // do value math on this side by checking transactions
       const result = await prisma.transaction.create({
         data: {
           vendor: vendor,
@@ -50,7 +21,14 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'PUT') {
-      const { transactionId, vendor, amount, categoryId, moneyAccountId, date } = req.body;
+      const {
+        transactionId,
+        vendor,
+        amount,
+        categoryId,
+        moneyAccountId,
+        date
+      } = req.body;
       const updatetransaction = await prisma.transaction.update({
         where: {
           id: transactionId
@@ -76,7 +54,5 @@ export default async function handler(req, res) {
       res.status(201).json(deletetransaction);
     }
   }
-
   res.status(401);
-  
 }

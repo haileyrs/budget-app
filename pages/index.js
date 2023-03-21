@@ -2,6 +2,7 @@ import NavBar from '@/components/nav/navbar';
 import Footer from '@/components/nav/footer';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link'; 
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
       </Head>
       <NavBar>
         <main>
-          <div className="space-x-4 space-y-10">
+          <div className="space-x-4 space-y-10 mb-12">
             <div
               id="about-section"
               className="grid grid-cols-1 lg:grid-cols-2 justify-items-center content-center"
@@ -106,7 +107,9 @@ export default function Home() {
               <div className="flex items-center p-2">
                 <article className="prose">
                   <h1>Export Your Data</h1>
-                  <h2><em>Coming Soon</em></h2>
+                  <h2>
+                    <em>Coming Soon</em>
+                  </h2>
                   <h3>
                     Seamlessly export your data to csv, or into a format used to
                     create a sankey diagram using an external site. Simply
@@ -117,12 +120,12 @@ export default function Home() {
             </div>
             <div
               id="start-section"
-              className="grid grid-cols-1 lg:grid-cols-2 justify-items-center content-center"
+              className="p-4 grid grid-cols-1 lg:grid-cols-2 justify-items-center content-center"
             >
               <div className="flex items-center p-2">
                 <div className="mockup-code">
                   <pre data-prefix="$">
-                    <code>npm i daisyui</code>
+                    <code>npm run dev</code>
                   </pre>
                   <pre data-prefix=">" className="text-warning">
                     <code>installing...</code>
@@ -134,7 +137,15 @@ export default function Home() {
               </div>
               <div className="flex items-center p-2 lg:order-first">
                 <article className="prose">
-                  <h1>instructions for setup</h1>
+                  <h1>Let's Get Started!</h1>
+                  <h3>
+                    Download the code from {' '}
+                    <Link href="https://github.com/haileyrs/budget-app">
+                      this repository
+                    </Link>
+                    , install the dependencies, and you will be up and running
+                    in no time.
+                  </h3>
                 </article>
               </div>
             </div>

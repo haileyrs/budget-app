@@ -4,7 +4,7 @@ import AddTransaction from '@/components/transactions/addTransactionModal';
 import Head from 'next/head';
 import Router from 'next/router';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]';
+import { authOptions } from '../../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import prisma from '@/lib/prisma';
 
@@ -17,13 +17,14 @@ export async function getServerSideProps(context) {
     where: { userId: user.id }
   });
 
+  let pageMonth = parseInt(context?.params?.month);
   let today = new Date();
   let y = today.getFullYear();
-  let m = today.getMonth();
 
-  let minDate = y + '-' + (m + 1) + '-01';
-  let maxDate = m === 11 ? y + 1 + '-01-01' : y + '-' + (m + 2) + '-01';
-  
+  let minDate = y + '-' + (pageMonth + 1) + '-01';
+  let maxDate =
+    pageMonth === 11 ? y + 1 + '-01-01' : y + '-' + (pageMonth + 2) + '-01';
+
   const transactions = await prisma.transaction.findMany({
     where: {
       AND: [
@@ -51,23 +52,52 @@ export async function getServerSideProps(context) {
       user: user,
       transactions: transactions,
       categories: categories,
-      accounts: accounts
+      accounts: accounts,
+      pageMonth: pageMonth
     }
   };
 }
 
-export default function Transactions({ user, transactions, categories, accounts }) {
+export default function TransactionHistory({
+  user,
+  transactions,
+  categories,
+  accounts,
+  pageMonth
+}) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
-    const date = new Date();
-
-    const getHistory = (e) => {
+    const goBack = (e) => {
       e.preventDefault();
-      const sendMonth = date.getMonth() - 1;
-      Router.push('/tabs/transactions/[month]', `/tabs/transactions/${sendMonth}`);
+      const month = pageMonth - 1;
+      const year = 2023;
+      // need to add year to url if possible to have two variables(year/month)
+      // for now you only view transactions in this year
+      Router.push('/tabs/transactions/[month]', `/tabs/transactions/${month}`);
     };
-    
+
+    const goForward = (e) => {
+      e.preventDefault();
+      const month = pageMonth + 1;
+      const year = 2023;
+      if (month === new Date().getMonth() && year === 2023) {
+        Router.push('/tabs/transactions');
+      } else {
+        // need to add year to url if possible to have two variables(year/month)
+        // for now you only view transactions in this year
+        Router.push(
+          '/tabs/transactions/[month]',
+          `/tabs/transactions/${month}`
+        );
+      }
+    };
+    let lastMonth = false;
+    if (pageMonth === 0) {
+      lastMonth = true;
+    }
+    const date = new Date(pageMonth + 1 + '/1/2023');
+
     return (
       <>
         <Head>
@@ -108,12 +138,16 @@ export default function Transactions({ user, transactions, categories, accounts 
                   </h3>
                 </article>
                 <button
-                  onClick={(e) => getHistory(e)}
-                  className="ml-3 btn btn-sm btn-circle"
+                  disabled={lastMonth}
+                  onClick={(e) => goBack(e)}
+                  className="ml-2 btn btn-sm btn-circle"
                 >
                   ❮
                 </button>
-                <button disabled className="mx-2 btn btn-sm btn-circle">
+                <button
+                  onClick={(e) => goForward(e)}
+                  className="mx-2 btn btn-sm btn-circle"
+                >
                   ❯
                 </button>
               </div>

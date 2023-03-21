@@ -113,7 +113,7 @@ export default function InternalNavBar({ children, user }) {
             </li>
             <li>
               <Link
-                className={activeClass(true, '/tabs/transactions')}
+                className={activeClass(false, '/tabs/transactions')}
                 href="/tabs/transactions/"
               >
                 Transactions

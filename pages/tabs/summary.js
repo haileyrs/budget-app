@@ -9,10 +9,12 @@ import prisma from '@/lib/prisma';
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
-  console.log(session)
   let today = new Date();
   let y = today.getFullYear();
   let m = today.getMonth();
+
+  let minDate = y + "-" + (m + 1) + '-01';
+  let maxDate = (m === 11 ? y + 1 + '-01-01' : y + '-' + (m + 2) + '-01');
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
@@ -27,7 +29,7 @@ export async function getServerSideProps(context) {
   });
   const transactions = await prisma.transaction.findMany({
     where: {
-      AND: [{ moneyAccountId: { in: accounts.map((e) => e.id) } }]
+      AND: [{ moneyAccountId: { in: accounts.map((e) => e.id) }, date: { gte: new Date(minDate), lt: new Date(maxDate)} }]
     },
     include: {
       category: {
@@ -39,7 +41,7 @@ export async function getServerSideProps(context) {
     }
   });
 
-  // transactions.sort((t, a) => a.day - t.day);
+  transactions.sort((t, a) => new Date(a.date) - new Date(t.date));
 
   return {
     props: {

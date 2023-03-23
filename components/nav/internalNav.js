@@ -47,7 +47,7 @@ export default function InternalNavBar({ children, user }) {
             </div>
             <div className="flex-1">
               <button className="btn btn-ghost normal-case text-xl">
-                <Link href="/tabs/summary">Budgie</Link>
+                <Link href="/tabs/summary">Budgit</Link>
               </button>
             </div>
             {/* theme switch */}

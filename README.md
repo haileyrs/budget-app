@@ -22,6 +22,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Purpose
 
+This project was inspired by my want for a more customizable financial data tracking application. I originally tracked my finances in a google spreadsheet, but spreadsheets don't have enough structure. Other budgeting apps out there are nice because they work with Plaid and automatically fill in your info, but splitting or hiding transactions is complex and inter-account transfers appear as transactions, which does not reflect how much is actually spent in a month. With this app*, accounts will update automatically via Plaid, but* you can also add accounts and update them manually. Transactions are all manual input and not touched by Plaid. Budgets are calculated by month in the application based on transactions you enter.
+
 ## Notes
 
 The 'Income' category type by default is the only value that will be displayed as a positive number in the transaction history, all others will be converted to negative value automatically if not entered as so. This type will also not show up in the categories dropdown on the add budget modal. 

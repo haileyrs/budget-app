@@ -5,6 +5,8 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from './/api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import prisma from '@/lib/prisma';
+import CategorySettings from '@/components/settings/categorySettings';
+import BudgetSettings from '@/components/settings/budgetSettings';
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -25,46 +27,22 @@ export async function getServerSideProps(context) {
 
 export default function Settings({ user, categories }) {
   const { data: session, status } = useSession({ required: true });
-  let catError = false;
 
   if (status == 'authenticated') {
-    const handleSubmit = async (event) => {
-      event.preventDefault();
-      
-      if (categories.find(c => event.target.name.value == c.name)) {
-        catError = true;
-      } else {
-        try {
-          const data = {
-            name: event.target.name.value
-          };
-          const response = await fetch(`/api/category`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
 
-          const result = await response.json();
-          await Router.push('/settings');
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
+    const budgetTab = () => {
+      document.getElementById('categorySettings').className = 'hidden';
+      document.getElementById('budgetSettings').className = '';
+      document.getElementById('budgetTab').className = 'tab tab-bordered tab-active';
+      document.getElementById('categoryTab').className = 'tab tab-bordered';
+    }
 
-    const removeCategory = async (id, e) => {
-      e.preventDefault();
-      try {
-        const response = await fetch(`/api/category`, {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({categoryId: id})
-        });
-        const result = await response.json();
-        await Router.push('/settings');
-      } catch (error) {
-        console.log(error);
-      }
+    const categoryTab = () => {
+      document.getElementById('budgetSettings').className = 'hidden';
+      document.getElementById('categorySettings').className = '';
+      document.getElementById('categoryTab').className =
+        'tab tab-bordered tab-active';
+      document.getElementById('budgetTab').className = 'tab tab-bordered';
     }
 
     return (
@@ -79,65 +57,28 @@ export default function Settings({ user, categories }) {
                 <h1>Settings</h1>
               </article>
             </div>
-            {/* add and delete categories here */}
-            {/* when deleting, add option to transfer an transactions/budgets with that category to a different one */}
-            <div className="flex">
-              {/* <label className="swap">
-                  <input type="checkbox" />
-                  <div className="swap-on">ON</div>
-                  <div className="swap-off">OFF</div>
-                </label> */}
-              {/* this is so ugly but i needed it quickly */}
-              <div>
-                <p className="italic font-semibold text-primary">
-                  Add a category
-                </p>
-                <form onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="category name"
-                    className="input input-bordered input-primary w-full max-w-xs"
-                    required
-                  />
-                  <button className="btn" type="submit">
-                    Save
-                  </button>
-                </form>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="table table-zebra table-compact w-full">
-                  <tbody>
-                    {categories.map((c) => (
-                      <tr key={c.id}>
-                        <th>{c.name}</th>
-                        <td>
-                          <label
-                            onClick={(e) => removeCategory(c.id, e)}
-                            className="btn"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-6 w-6"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </label>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            <div className="tabs">
+              <button
+                id="budgetTab"
+                className="tab tab-bordered tab-active"
+                onClick={budgetTab}
+              >
+                Budgets
+              </button>
+              <button
+                id="categoryTab"
+                className="tab tab-bordered"
+                onClick={categoryTab}
+              >
+                Categories
+              </button>
+              {/* <a className="tab tab-bordered">Tab 3</a> */}
+            </div>
+            <div id="budgetSettings">
+              <BudgetSettings />
+            </div>
+            <div id="categorySettings" className="hidden">
+              <CategorySettings categories={categories} />
             </div>
           </main>
         </InternalNavBar>

@@ -22,8 +22,8 @@ export default function Home() {
             >
               <div className="flex items-center p-2">
                 <section className="prose">
-                  <h1 id="home-page-title">App about section</h1>
-                  <h3>This app does this, and blah, and this!</h3>
+                  <h1 id="home-page-title">Welcome to this app</h1>
+                  <h3>Monitor your financial health with this lightweight and customizable app.</h3>
                 </section>
               </div>
               <div className="flex items-center p-2">
@@ -87,6 +87,7 @@ export default function Home() {
                   <h3>
                     Add your financial accounts for an organized view of your
                     net worth.
+                    {/* Add and edit accounts manually, or have them automatically updated through Plaid  */}
                   </h3>
                 </article>
               </div>

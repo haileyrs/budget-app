@@ -29,6 +29,7 @@ main {
 }
 
 
+
 /* HOME PAGE */
 /* #home-page-title {
   font-family: 'Italiana', serif;
@@ -49,3 +50,7 @@ main {
   margin: 4px;
 }
 
+/* SETTINGS */
+.settings-container {
+  margin: 8px;
+}

@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.5rem;
+}
+
+.inputdiv {
+  grid-column: span 2 / span 2;
+  grid-column-start: 2;
+  padding: 6px;
+}

@@ -1,9 +1,15 @@
+import styles from './settings.module.css';
+import ButtonLayout from '../addNewButtonLayout';
+import EditCategory from './editCategoryModal';
+import Router from 'next/router';
+
 export default function CategorySettings({ categories = [] }) {
+  const categoryNames = categories.map((c) => c.name);
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (categories.find((c) => event.target.name.value == c.name)) {
-      catError = true;
+      const catError = true;
     } else {
       try {
         const data = {
@@ -17,55 +23,74 @@ export default function CategorySettings({ categories = [] }) {
 
         const result = await response.json();
         await Router.push('/settings');
+        document.getElementById('catForm').reset();
+        document.activeElement.blur()
+        // will eventually make this smoother and more responsive
       } catch (error) {
         console.log(error);
       }
     }
   };
 
-  const removeCategory = async (id, e) => {
+  const editCategory = async (c, e) => {
     e.preventDefault();
-    try {
-      const response = await fetch(`/api/category`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ categoryId: id })
-      });
-      const result = await response.json();
-      await Router.push('/settings');
-    } catch (error) {
-      console.log(error);
-    }
+  }
+
+  const removeCategory = async (c, e) => {
+    e.preventDefault();
+    console.log(c)
+    if (c.Transaction.length) {
+      console.log('need to convert transactions or delete them')
+    } else {
+      try {
+        const response = await fetch(`/api/category`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ categoryId: c.id })
+        });
+        const result = await response.json();
+        await Router.push('/settings');
+      } catch (error) {
+        console.log(error);
+      }
+    }   
   };
 
   return (
     <>
-      <div className="flex flex-col col-span-1">
+      <div className={styles.container}>
         <article className="prose">
           <h2>Categories</h2>
         </article>
-        {/* when deleting, add option to transfer an transactions/budgets with that category to a different one */}
-        <div className="flex">
-          <div className="grid grid-cols-1">
-            <div>
-              <p className="italic font-semibold text-primary">
-                Add a category
-              </p>
-            </div>
-            <div className="flex flex-row">
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="category name"
-                  className="input input-bordered input-primary"
-                  required
-                />
-                <button className="btn ml-2" type="submit">
-                  Add
-                </button>
-              </form>
+        <div id="catDropdown" className="dropdown dropdown-end">
+          <label tabIndex={0} className="btn btn-sm gap-2 mt-2">
+            <ButtonLayout />
+          </label>
+          <div
+            tabIndex={0}
+            className="dropdown-content card card-bordered bg-base-100 p-2 w-80"
+          >
+            <div className="flex m-2">
+              <div className="grid grid-cols-1">
+                <p className="italic font-semibold text-primary">
+                  Add a category
+                </p>
+                <div className="flex flex-row pt-1">
+                  <form id="catForm" onSubmit={handleSubmit}>
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      placeholder="category name"
+                      className="input input-bordered input-primary w-52"
+                      required
+                    />
+                    <button className="btn ml-2" type="submit">
+                      Add
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -83,16 +108,14 @@ export default function CategorySettings({ categories = [] }) {
             {categories.map((c) => (
               <tr key={c.id}>
                 <th>{c.name}</th>
-                <td>placeholder</td>
+                <td>{c.Transaction.length}</td>
                 <td>
-                  <label
-                    onClick={(e) => removeCategory(c.id, e)}
-                    className="btn btn-sm mr-2"
-                  >
+                  <label htmlFor={c.id} className="btn btn-sm mr-2">
                     Edit
                   </label>
+                  <EditCategory category={c} catNames={categoryNames} />
                   <label
-                    onClick={(e) => removeCategory(c.id, e)}
+                    onClick={(e) => removeCategory(c, e)}
                     className="btn btn-sm btn-error"
                   >
                     Delete

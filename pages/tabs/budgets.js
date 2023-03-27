@@ -1,6 +1,7 @@
 import AddBudget from '@/components/budget/addBudgetModal';
 import BudgetWidget from '@/components/budget/budgetWidget';
 import InternalNavBar from '@/components/nav/internalNav';
+import ButtonLayout from '@/components/addNewButtonLayout';
 import Head from 'next/head';
 import Router from 'next/router';
 import { getServerSession } from 'next-auth';
@@ -101,21 +102,7 @@ export default function Budgets({
                   htmlFor="add-budget-modal"
                   className="btn btn-sm gap-2 mx-2 mt-2"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 4.5v15m7.5-7.5h-15"
-                    />
-                  </svg>
-                  Add New
+                  <ButtonLayout />
                 </label>
               </div>
               <div className="flex self-end place-items-end">

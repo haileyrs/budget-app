@@ -1,3 +1,6 @@
+import styles from './settings.module.css';
+import ButtonLayout from '../addNewButtonLayout';
+
 export default function BudgetSettings({ budgets = [] }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,6 +20,8 @@ export default function BudgetSettings({ budgets = [] }) {
 
     //     const result = await response.json();
     //     await Router.push('/settings');
+        // document.getElementById('budgetForm').reset();
+        // document.activeElement.blur();
     //   } catch (error) {
     //     console.log(error);
     //   }
@@ -40,31 +45,47 @@ export default function BudgetSettings({ budgets = [] }) {
 
   return (
     <>
-      <div className="flex flex-col col-span-1">
+      <div className={styles.container}>
         <article className="prose">
           <h2>Budgets</h2>
         </article>
-        <div className="flex">
-          <div className="grid grid-cols-1">
-            <div>
-              <p className="italic font-semibold text-primary">
-                Add a recurring budget.
-              </p>
-            </div>
-            <div className="flex flex-row">
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="budget name"
-                  className="input input-bordered input-primary"
-                  required
-                />
-                <button className="btn ml-2" type="submit">
-                  Add
-                </button>
-              </form>
+        <div className="dropdown dropdown-end">
+          <label tabIndex={0} className="btn btn-sm gap-2 mt-2">
+            <ButtonLayout />
+          </label>
+          <div
+            tabIndex={0}
+            className="dropdown-content card card-bordered bg-base-100 p-2 w-60"
+          >
+            <div className="flex m-2">
+              <div className="grid grid-cols-1">
+                <p className="italic font-semibold text-primary">
+                  Add a recurring budget
+                </p>
+                <div className="flex flex-row pt-1">
+                  <form id="budgetForm" onSubmit={handleSubmit}>
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      placeholder="budget name"
+                      className="input input-bordered input-primary w-full my-1"
+                      required
+                    />
+                    <input
+                      type="number"
+                      name="name"
+                      id="name"
+                      placeholder="limit"
+                      className="input input-bordered input-primary w-1/2 my-1"
+                      required
+                    />
+                    <button className="btn ml-2" type="submit">
+                      Add
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -79,10 +100,10 @@ export default function BudgetSettings({ budgets = [] }) {
             </tr>
           </thead>
           <tbody>
-            {budgets.map((c) => (
-              <tr key={c.id}>
-                <th>{c.name}</th>
-                <td>placeholder</td>
+            {budgets.map((b) => (
+              <tr key={b.id}>
+                <th>{b.category.name}</th>
+                <td>${b.max}</td>
                 <td>
                   <label
                     onClick={(e) => removeCategory(c.id, e)}

@@ -32,7 +32,6 @@ export default function AddTransaction({ user, categories, accounts }) {
 
       const result = await response.json();
       document.getElementById('add-transaction-modal').click();
-      console.log(result);
       await Router.push('/tabs/transactions');
     } catch (error) {
       console.log(error);

@@ -22,7 +22,7 @@ export default function Home() {
             >
               <div className="flex items-center p-2">
                 <section className="prose">
-                  <h1 id="home-page-title">Welcome to this app</h1>
+                  <h1 id="home-page-title">Your finances, simplified</h1>
                   <h3>Monitor your financial health with this lightweight and customizable app.</h3>
                 </section>
               </div>
@@ -152,7 +152,7 @@ export default function Home() {
             </div>
           </div>
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </NavBar>
     </>
   );

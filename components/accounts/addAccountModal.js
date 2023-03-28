@@ -25,7 +25,6 @@ export default function AddAccount({ user }) {
 
       const result = await response.json();
       document.getElementById('add-account-modal').click();
-      console.log(result);
       await Router.push('/tabs/accounts');
     } catch (error) {
       console.log(error);

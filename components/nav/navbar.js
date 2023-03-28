@@ -32,7 +32,7 @@ export default function NavBar({ children }) {
               </div>
               <div className="flex-1">
                 <button className="btn btn-ghost normal-case text-xl">
-                  <Link href="/">Bad Title</Link>
+                  <Link href="/">working title</Link>
                 </button>
               </div>
             </div>

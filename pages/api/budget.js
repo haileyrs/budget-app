@@ -12,16 +12,6 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
 
   if (session) {
-    // if (req.method == 'GET') {
-    //   const { userId, month, year } = req.body;
-    //   const budgets = await prisma.budget.findMany({
-    //     where: {
-    //       AND: [{ userId: userId }, { month: month }, { year: year }]
-    //     }
-    //   });
-    //   res.status(200).json(budgets);
-    // }
-
     if (req.method == 'POST') {
       const { userId, categoryId, max } = req.body;
       const result = await prisma.budget.create({

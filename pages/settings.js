@@ -14,6 +14,7 @@ export async function getServerSideProps(context) {
   });
 
   const categories = await prisma.category.findMany({
+    where: { userId: user.id },
     include: {
       Transaction: {
         select: { id: true }
@@ -90,7 +91,7 @@ export default function Settings({ user, categories, budgets }) {
             </div>
             <div className="settings-container">
               <div id="categorySettings">
-                <CategorySettings categories={categories} />
+                <CategorySettings categories={categories} user={user} />
               </div>
               {/* <div id="budgetSettings" className="hidden">
                 <BudgetSettings budgets={budgets} />

@@ -37,7 +37,9 @@ export async function getServerSideProps(context) {
     where: { date: { gte: new Date(minDate), lt: new Date(maxDate) } }
   });
 
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({
+    where: { userId: user.id }
+  });
   const filteredCategories = categories.filter((c) => c.name != 'Income');
   return {
     props: {

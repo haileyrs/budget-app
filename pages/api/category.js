@@ -7,10 +7,11 @@ export default async function handler(req, res) {
 
   if (session) {
     if (req.method == 'POST') {
-      const { name } = req.body;
+      const { name, userId } = req.body;
       const result = await prisma.category.create({
         data: {
-          name: name
+          name: name,
+          userId: userId
         }
       });
       res.status(201).json(result);

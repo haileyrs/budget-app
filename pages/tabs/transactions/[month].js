@@ -45,7 +45,9 @@ export async function getServerSideProps(context) {
     }
   });
 
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({
+    where: { userId: user.id }
+  });
   transactions.sort((t, a) => new Date(a.date) - new Date(t.date));
 
   return {

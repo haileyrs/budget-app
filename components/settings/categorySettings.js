@@ -4,7 +4,7 @@ import EditCategory from './editCategoryModal';
 import DeleteCategory from './deleteCategoryModal';
 import Router from 'next/router';
 
-export default function CategorySettings({ categories = [] }) {
+export default function CategorySettings({ categories = [], user}) {
   const categoryNames = categories.map((c) => c.name);
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -14,7 +14,8 @@ export default function CategorySettings({ categories = [] }) {
     } else {
       try {
         const data = {
-          name: event.target.name.value
+          name: event.target.name.value,
+          userId: user.id
         };
         const response = await fetch(`/api/category`, {
           method: 'POST',

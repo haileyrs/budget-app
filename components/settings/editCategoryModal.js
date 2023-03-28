@@ -20,7 +20,7 @@ export default function EditCategory({ category, catNames }) {
         });
 
         const result = await response.json();
-        document.getElementById(category.id).click();
+        document.getElementById('edit-category' + category.id).click();
         await Router.push('/settings');
       } catch (error) {
         console.log(error);
@@ -30,7 +30,7 @@ export default function EditCategory({ category, catNames }) {
 
   return (
     <>
-      <Modal title={'Edit Category: ' + category.name} control={category.id}>
+      <Modal title={'Edit Category: ' + category.name} control={'edit-category'+category.id}>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
             <div className="col-span-4 pb-2">

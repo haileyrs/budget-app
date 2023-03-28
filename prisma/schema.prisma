@@ -81,7 +81,7 @@ model MoneyAccount {
 
 model Budget {
   id         Int      @id @default(autoincrement())
-  category   Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   categoryId Int
   max        Float
   value      Float
@@ -96,9 +96,9 @@ model Transaction {
   vendor         String
   amount         Float
   date           String
-  category       Category     @relation(fields: [categoryId], references: [id], onUpdate: Cascade)
+  category       Category     @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   categoryId     Int
-  moneyAccount   MoneyAccount @relation(fields: [moneyAccountId], references: [id])
+  moneyAccount   MoneyAccount @relation(fields: [moneyAccountId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   moneyAccountId Int
 }
 
@@ -112,7 +112,7 @@ model Category {
 
 model RecurringBudget {
   id         Int      @id @default(autoincrement())
-  category   Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   categoryId Int
   max        Float
   user       User     @relation(fields: [userId], references: [id])

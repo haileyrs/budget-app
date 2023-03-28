@@ -2,50 +2,30 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from './auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 
-let today = new Date();
-let y = today.getFullYear();
-let m = today.getMonth();
-
-// get serverside props for page loads
-// add method to find all budgets for user
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
 
   if (session) {
-    // if (req.method == 'GET') {
-    //   const { userId, month, year } = req.body;
-    //   const budgets = await prisma.budget.findMany({
-    //     where: {
-    //       AND: [{ userId: userId }, { month: month }, { year: year }]
-    //     }
-    //   });
-    //   res.status(200).json(budgets);
-    // }
-
     if (req.method == 'POST') {
       const { userId, categoryId, max } = req.body;
-      const result = await prisma.budget.create({
+      const result = await prisma.recurringBudget.create({
         data: {
           userId: userId,
           categoryId: categoryId,
-          max: max,
-          value: 0,
-          month: m,
-          year: y
+          max: max
         }
       });
       res.status(201).json(result);
     }
 
     if (req.method == 'PUT') {
-      const { id, max, categoryId } = req.body;
-      const updateBudget = await prisma.budget.update({
+      const { id, max } = req.body;
+      const updateBudget = await prisma.recurringBudget.update({
         where: {
           id: id
         },
         data: {
-          max: max,
-          categoryId: categoryId
+          max: max
         }
       });
       res.status(201).json(updateBudget);
@@ -53,7 +33,7 @@ export default async function handler(req, res) {
 
     if (req.method == 'DELETE') {
       const { id } = req.body;
-      const deleteBudget = await prisma.budget.delete({
+      const deleteBudget = await prisma.recurringBudget.delete({
         where: {
           id: id
         }

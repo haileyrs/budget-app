@@ -17,6 +17,9 @@ export async function getServerSideProps(context) {
     include: {
       Transaction: {
         select: { id: true }
+      },
+      Budget: {
+        select: { id: true }
       }
     }
   });
@@ -43,18 +46,18 @@ export default function Settings({ user, categories, budgets }) {
   const { data: session, status } = useSession({ required: true });
 
   if (status == 'authenticated') {
-    const budgetTab = () => {
-      document.getElementById('categorySettings').className = 'hidden';
-      document.getElementById('budgetSettings').className = '';
-      document.getElementById('budgetTab').className = 'tab tab-bordered tab-active';
-      document.getElementById('categoryTab').className = 'tab tab-bordered';
-    };
+    // const budgetTab = () => {
+    //   document.getElementById('categorySettings').className = 'hidden';
+    //   document.getElementById('budgetSettings').className = '';
+    //   document.getElementById('budgetTab').className = 'tab tab-bordered tab-active';
+    //   document.getElementById('categoryTab').className = 'tab tab-bordered';
+    // };
     const categoryTab = () => {
-      document.getElementById('budgetSettings').className = 'hidden';
+      // document.getElementById('budgetSettings').className = 'hidden';
       document.getElementById('categorySettings').className = '';
       document.getElementById('categoryTab').className =
         'tab tab-bordered tab-active';
-      document.getElementById('budgetTab').className = 'tab tab-bordered';
+      // document.getElementById('budgetTab').className = 'tab tab-bordered';
     };
 
     return (
@@ -68,47 +71,30 @@ export default function Settings({ user, categories, budgets }) {
               <article className="prose">
                 <h1>Settings</h1>
               </article>
-              {/* <div className="tabs self-end pl-5">
-                <button
-                  id="budgetTab"
-                  className="tab tab-bordered tab-active"
-                  onClick={budgetTab}
-                >
-                  Budgets
-                </button>
-                <button
-                  id="categoryTab"
-                  className="tab tab-bordered"
-                  onClick={categoryTab}
-                >
-                  Categories
-                </button>
-              </div> */}
             </div>
             <div className="tabs">
               <button
-                id="budgetTab"
-                className="tab tab-bordered tab-active"
-                onClick={budgetTab}
-              >
-                Budgets
-              </button>
-              <button
                 id="categoryTab"
-                className="tab tab-bordered"
+                className="tab tab-bordered tab-active"
                 onClick={categoryTab}
               >
                 Categories
               </button>
-              
+              {/* <button
+                id="budgetTab"
+                className="tab tab-bordered"
+                onClick={budgetTab}
+              >
+                Budgets
+              </button> */}
             </div>
             <div className="settings-container">
-              <div id="budgetSettings">
-                <BudgetSettings budgets={budgets} />
-              </div>
-              <div id="categorySettings" className="hidden">
+              <div id="categorySettings">
                 <CategorySettings categories={categories} />
               </div>
+              {/* <div id="budgetSettings" className="hidden">
+                <BudgetSettings budgets={budgets} />
+              </div> */}
             </div>
           </main>
         </InternalNavBar>

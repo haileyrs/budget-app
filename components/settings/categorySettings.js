@@ -1,6 +1,7 @@
 import styles from './settings.module.css';
 import ButtonLayout from '../addNewButtonLayout';
 import EditCategory from './editCategoryModal';
+import DeleteCategory from './deleteCategoryModal';
 import Router from 'next/router';
 
 export default function CategorySettings({ categories = [] }) {
@@ -25,35 +26,26 @@ export default function CategorySettings({ categories = [] }) {
         await Router.push('/settings');
         document.getElementById('catForm').reset();
         document.activeElement.blur()
-        // will eventually make this smoother and more responsive
+        // make this smoother and more responsive
       } catch (error) {
         console.log(error);
       }
     }
   };
 
-  const editCategory = async (c, e) => {
-    e.preventDefault();
-  }
-
   const removeCategory = async (c, e) => {
     e.preventDefault();
-    console.log(c)
-    if (c.Transaction.length) {
-      console.log('need to convert transactions or delete them')
-    } else {
-      try {
-        const response = await fetch(`/api/category`, {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ categoryId: c.id })
-        });
-        const result = await response.json();
-        await Router.push('/settings');
-      } catch (error) {
-        console.log(error);
-      }
-    }   
+    try {
+      const response = await fetch(`/api/category`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ categoryId: c.id })
+      });
+      const result = await response.json();
+      await Router.push('/settings');
+    } catch (error) {
+      console.log(error);
+    }  
   };
 
   return (
@@ -101,6 +93,7 @@ export default function CategorySettings({ categories = [] }) {
             <tr>
               <th>Name</th>
               <th>Transactions</th>
+              <th>Budgets</th>
               <th>Options</th>
             </tr>
           </thead>
@@ -109,17 +102,31 @@ export default function CategorySettings({ categories = [] }) {
               <tr key={c.id}>
                 <th>{c.name}</th>
                 <td>{c.Transaction.length}</td>
+                <td>{c.Budget.length}</td>
                 <td>
-                  <label htmlFor={c.id} className="btn btn-sm mr-2">
+                  <label
+                    htmlFor={'edit-category' + c.id}
+                    className="btn btn-sm mr-2"
+                  >
                     Edit
                   </label>
                   <EditCategory category={c} catNames={categoryNames} />
-                  <label
-                    onClick={(e) => removeCategory(c, e)}
-                    className="btn btn-sm btn-error"
-                  >
-                    Delete
-                  </label>
+                  {c.Transaction.length || c.Budget.length ? (
+                    <label
+                      htmlFor={'delete-category' + c.id}
+                      className="btn btn-sm btn-error"
+                    >
+                      Delete
+                    </label>
+                  ) : (
+                    <label
+                      onClick={(e) => removeCategory(c, e)}
+                      className="btn btn-sm btn-error"
+                    >
+                      Delete
+                    </label>
+                  )}
+                  <DeleteCategory category={c} allCategories={categories} />
                 </td>
               </tr>
             ))}

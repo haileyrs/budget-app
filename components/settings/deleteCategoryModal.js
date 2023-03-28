@@ -1,0 +1,115 @@
+import Modal from '../modalTemplate';
+import styles from './settings.module.css';
+import Router from 'next/router';
+
+export default function DeleteCategory({ category, allCategories }) {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const newCategory = allCategories.find(
+      (e) => e.name == event.target.category.value
+    );
+    try {
+      if (category.Budget.length) {
+        for (const b of category.Budget) {
+          const data = {
+            id: b.id,
+            categoryId: newCategory.id
+          };
+          const bResponse = await fetch(`/api/budget`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        }
+      };
+
+      if (category.Transaction.length) {
+        for (const t of category.Transaction) {
+          const data = {
+            transactionId: t.id,
+            categoryId: newCategory.id
+          };
+          const tResponse = await fetch(`/api/transaction`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        }
+      };
+      
+      const response = await fetch(`/api/category`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ categoryId: category.id })
+      });
+      const result = await response.json();
+      document.getElementById('delete-category' + category.id).click();
+      await Router.push('/settings');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeAssoc = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`/api/category`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ categoryId: category.id })
+      });
+      const result = await response.json();
+      document.getElementById('delete-category' + category.id).click();
+      await Router.push('/settings');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <>
+      <Modal
+        title={'Delete Category: ' + category.name}
+        control={'delete-category' + category.id}
+      >
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-4">
+            <div className="col-span-4 pb-2">
+              <p className="whitespace-normal italic font-semibold text-primary">
+                You are trying to delete a category that has transactions and
+                budgets attached to it. Please select an existing category you
+                would like to transfer these items to, or select 'Delete
+                Associations'
+              </p>
+            </div>
+            <div className={styles.inputdiv}>
+              <select
+                id="category"
+                name="category"
+                className="select select-primary w-full max-w-xs"
+                defaultValue="category"
+                required
+              >
+                <option disabled>category</option>
+                {allCategories.map((c) => (
+                  <option key={c.id}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="modal-action m-1">
+            <button
+              className="btn btn-error"
+              onClick={(e) => removeAssoc(e)}
+            >
+              Delete Associations
+            </button>
+            <button className="btn" type="submit">
+              Save
+            </button>
+          </div>
+        </form>
+      </Modal>
+    </>
+  );
+}

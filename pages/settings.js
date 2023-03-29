@@ -1,11 +1,13 @@
 import InternalNavBar from '@/components/nav/internalNav';
+import CategorySettings from '@/components/settings/categorySettings';
+import BudgetSettings from '@/components/settings/budgetSettings';
+import Alert from '@/components/alert';
 import Head from 'next/head';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './/api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import prisma from '@/lib/prisma';
-import CategorySettings from '@/components/settings/categorySettings';
-import BudgetSettings from '@/components/settings/budgetSettings';
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -45,6 +47,7 @@ export async function getServerSideProps(context) {
 
 export default function Settings({ user, categories, budgets }) {
   const { data: session, status } = useSession({ required: true });
+  const router = useRouter();
 
   if (status == 'authenticated') {
     // const budgetTab = () => {
@@ -68,6 +71,14 @@ export default function Settings({ user, categories, budgets }) {
         </Head>
         <InternalNavBar user={user}>
           <main>
+            {router.query?.message ? (
+              <Alert
+                message={router.query.message}
+                alertType={router.query.messageType}
+              />
+            ) : (
+              ''
+            )}
             <div id="title-div">
               <article className="prose">
                 <h1>Settings</h1>

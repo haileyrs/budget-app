@@ -1,5 +1,4 @@
 import Modal from '../modalTemplate';
-import ErrorMessage from '../errorMessage';
 import styles from './transaction.module.css';
 import { useState } from 'react';
 import Router from 'next/router';
@@ -15,8 +14,6 @@ export default function EditTransaction({
   accounts,
   categories
 }) {
-  let apiErr = false;
-  let errMessage = '';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,8 +62,6 @@ export default function EditTransaction({
       await Router.push('/tabs/transactions');
     } catch (error) {
       console.log(error);
-      errMessage = 'There was an error updating this account.';
-      apiErr = true;
     }
   };
 
@@ -79,11 +74,18 @@ export default function EditTransaction({
         body: JSON.stringify({ transactionId: id })
       });
       const result = await response.json();
-      await Router.push('/tabs/transactions');
+      await Router.push(
+        {
+          pathname: '/tabs/transactions',
+          query: {
+            messageType: 'success',
+            message: 'Transaction was successfully deleted'
+          }
+        },
+        '/tabs/transactions'
+      );
     } catch (error) {
       console.log(error);
-      errMessage = 'There was an error deleting this transaction.';
-      apiErr = true;
     }
   };
 
@@ -174,36 +176,7 @@ export default function EditTransaction({
                 onChange={handleChange}
               />
             </div>
-            {/* <div className={styles.inputdiv}>
-              <div className="flex">
-                <input
-                  type="number"
-                  id="month"
-                  name="month"
-                  placeholder={month}
-                  className="input input-bordered input-primary w-full max-w-xs"
-                />
-                <input
-                  type="number"
-                  id="day"
-                  name="day"
-                  placeholder={day}
-                  className="input input-bordered input-primary w-full max-w-xs"
-                />
-              </div>
-            </div>
-            <div className={styles.inputdiv}>
-              <input
-                type="number"
-                id="year"
-                name="year"
-                placeholder={year}
-                className="input input-bordered input-primary w-full max-w-xs"
-              />
-            </div> */}
           </div>
-          {apiErr ? <ErrorMessage message={errMessage} /> : ''}
-
           <div className="modal-action m-1">
             <button className="btn btn-error" onClick={handleDelete}>
               Delete

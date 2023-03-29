@@ -1,5 +1,4 @@
 import Modal from '../modalTemplate';
-import ErrorMessage from '../errorMessage';
 import styles from './account.module.css';
 import Router from 'next/router';
 
@@ -48,7 +47,16 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
       });
       const result = await response.json();
       console.log(result);
-      await Router.push('/tabs/accounts');
+      await Router.push(
+        {
+          pathname: '/tabs/accounts',
+          query: {
+            messageType: 'success',
+            message: 'Account was successfully deleted'
+          }
+        },
+        '/tabs/accounts'
+      );
     } catch (error) {
       console.log(error);
       errMessage = 'There was an error deleting this account.'
@@ -85,8 +93,6 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
               />
             </div>
           </div>
-          {apiErr ? <ErrorMessage message={errMessage} /> : ''}
-
           <div className="modal-action m-1">
             <button className="btn btn-error" onClick={handleDelete}>
               Delete

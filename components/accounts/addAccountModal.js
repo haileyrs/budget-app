@@ -14,7 +14,7 @@ export default function AddAccount({ user }) {
       };
       if (data.type == 'Loan' || data.type == 'Credit') {
         if (data.value > 0) {
-          data.value *= -1
+          data.value *= -1;
         }
       }
       const response = await fetch(`/api/moneyAccount`, {
@@ -25,7 +25,16 @@ export default function AddAccount({ user }) {
 
       const result = await response.json();
       document.getElementById('add-account-modal').click();
-      await Router.push('/tabs/accounts');
+      await Router.push(
+        {
+          pathname: '/tabs/accounts',
+          query: {
+            messageType: 'success',
+            message: 'Account added successfully'
+          }
+        },
+        '/tabs/accounts'
+      );
     } catch (error) {
       console.log(error);
     }

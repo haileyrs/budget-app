@@ -8,9 +8,18 @@ export default function CategorySettings({ categories = [], user}) {
   const categoryNames = categories.map((c) => c.name);
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (categories.find((c) => event.target.name.value == c.name)) {
-      const catError = true;
+      // will probably move this
+      await Router.push(
+        {
+          pathname: '/settings',
+          query: {
+            messageType: 'warning',
+            message: 'A category with that name already exists'
+          }
+        },
+        '/settings'
+      );
     } else {
       try {
         const data = {
@@ -24,12 +33,30 @@ export default function CategorySettings({ categories = [], user}) {
         });
 
         const result = await response.json();
-        await Router.push('/settings');
+        await Router.push(
+          {
+            pathname: '/settings',
+            query: {
+              messageType: 'success',
+              message: 'Category added successfully'
+            }
+          },
+          '/settings'
+        );
         document.getElementById('catForm').reset();
         document.activeElement.blur()
-        // make this smoother and more responsive
       } catch (error) {
         console.log(error);
+        await Router.push(
+          {
+            pathname: '/settings',
+            query: {
+              messageType: 'error',
+              message: 'There was an error adding your category'
+            }
+          },
+          '/settings'
+        );
       }
     }
   };
@@ -43,7 +70,16 @@ export default function CategorySettings({ categories = [], user}) {
         body: JSON.stringify({ categoryId: c.id })
       });
       const result = await response.json();
-      await Router.push('/settings');
+      await Router.push(
+        {
+          pathname: '/settings',
+          query: {
+            messageType: 'success',
+            message: 'Category was successfully deleted'
+          }
+        },
+        '/settings'
+      );
     } catch (error) {
       console.log(error);
     }  

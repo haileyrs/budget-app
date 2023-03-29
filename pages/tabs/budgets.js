@@ -2,11 +2,13 @@ import AddBudget from '@/components/budget/addBudgetModal';
 import BudgetWidget from '@/components/budget/budgetWidget';
 import InternalNavBar from '@/components/nav/internalNav';
 import ButtonLayout from '@/components/addNewButtonLayout';
+import Alert from '@/components/alert';
 import Head from 'next/head';
 import Router from 'next/router';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import prisma from '@/lib/prisma';
 
 export async function getServerSideProps(context) {
@@ -60,6 +62,7 @@ export default function Budgets({
   currentMonth
 }) {
   const { data: session, status } = useSession({ required: true });
+  const router = useRouter();
 
   if (status == 'authenticated') {
     const getHistory = (e) => {
@@ -95,6 +98,14 @@ export default function Budgets({
         </Head>
         <InternalNavBar user={user}>
           <main>
+            {router.query?.message ? (
+              <Alert
+                message={router.query.message}
+                alertType={router.query.messageType}
+              />
+            ) : (
+              ''
+            )}
             <div className="justify-between" id="title-div">
               <div className="flex">
                 <article className="prose">

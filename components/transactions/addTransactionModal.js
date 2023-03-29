@@ -32,7 +32,16 @@ export default function AddTransaction({ user, categories, accounts }) {
 
       const result = await response.json();
       document.getElementById('add-transaction-modal').click();
-      await Router.push('/tabs/transactions');
+      await Router.push(
+        {
+          pathname: '/tabs/transactions',
+          query: {
+            messageType: 'success',
+            message: 'Transaction added successfully'
+          }
+        },
+        '/tabs/transactions'
+      );
     } catch (error) {
       console.log(error);
     }
@@ -139,36 +148,6 @@ export default function AddTransaction({ user, categories, accounts }) {
                 />
               </div> */}
             </div>
-            {/* <div className={styles.inputdiv}>
-              <div className="flex">
-                <input
-                  type="number"
-                  id="month"
-                  name="month"
-                  placeholder="month"
-                  className="input input-bordered input-primary w-full max-w-xs"
-                  required
-                />
-                <input
-                  type="number"
-                  id="day"
-                  name="day"
-                  placeholder="day"
-                  className="input input-bordered input-primary w-full max-w-xs"
-                  required
-                />
-              </div>
-            </div>
-            <div className={styles.inputdiv}>
-              <input
-                type="number"
-                id="year"
-                name="year"
-                placeholder="year"
-                className="input input-bordered input-primary w-full max-w-xs"
-                required
-              />
-            </div> */}
           </div>
           <div className="modal-action m-0">
             <button className="btn" type="submit">

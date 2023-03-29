@@ -23,7 +23,16 @@ export default function AddBudget({ user, categories }) {
       const result = await response.json();
       console.log(result);
       document.getElementById('add-budget-modal').click();
-      await Router.push('/tabs/budgets');
+      await Router.push(
+        {
+          pathname: '/tabs/budgets',
+          query: {
+            messageType: 'success',
+            message: 'Budget added successfully'
+          }
+        },
+        '/tabs/budgets'
+      );
     } catch (error) {
       console.log(error);
     }

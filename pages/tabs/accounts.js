@@ -3,14 +3,16 @@ import AccountWidget from '@/components/accounts/accountWidget';
 import AddAccount from '@/components/accounts/addAccountModal';
 import PlaidAddAccount from '@/components/accounts/plaidModal';
 import ButtonLayout from '@/components/addNewButtonLayout';
+import Alert from '@/components/alert';
 import Head from 'next/head';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import prisma from '@/lib/prisma';
 
 export async function getServerSideProps(context) {
-  const session = await getServerSession(context.req, context.res, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions);
   const user = await prisma.user.findUnique({
     where: { email: session.user.email }
   });
@@ -28,6 +30,7 @@ export async function getServerSideProps(context) {
 
 export default function Accounts({ accounts, user }) {
   const { data: session, status } = useSession({ required: true });
+  const router = useRouter();
 
   if (status == 'authenticated') {
     const checkingSavings = accounts.filter(
@@ -39,7 +42,7 @@ export default function Accounts({ accounts, user }) {
     const property = accounts.filter((a) => a.type == 'Property');
     const credit = accounts.filter((a) => a.type == 'Credit');
     const loans = accounts.filter((a) => a.type == 'Loan');
-    
+
     return (
       <>
         <Head>
@@ -47,6 +50,14 @@ export default function Accounts({ accounts, user }) {
         </Head>
         <InternalNavBar user={user}>
           <main>
+            {router.query?.message ? (
+              <Alert
+                message={router.query.message}
+                alertType={router.query.messageType}
+              />
+            ) : (
+              ''
+            )}
             <div id="title-div">
               <article className="prose">
                 <h1>Accounts</h1>
@@ -79,9 +90,6 @@ export default function Accounts({ accounts, user }) {
               </p>
             </div>
 
-            {/* <article className='prose pl-3'>
-                <h2>Checking & Savings</h2>
-              </article> */}
             <div className="account-group">
               <div className="divider">Checking & Savings</div>
               {checkingSavings.map((account) => (
@@ -155,5 +163,5 @@ export default function Accounts({ accounts, user }) {
         </InternalNavBar>
       </>
     );
-  } 
+  }
 }

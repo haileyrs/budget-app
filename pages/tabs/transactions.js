@@ -2,11 +2,13 @@ import InternalNavBar from '@/components/nav/internalNav';
 import TransactionTable from '@/components/transactions/transactionTable';
 import AddTransaction from '@/components/transactions/addTransactionModal';
 import ButtonLayout from '@/components/addNewButtonLayout';
+import Alert from '@/components/alert';
 import Head from 'next/head';
 import Router from 'next/router';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import prisma from '@/lib/prisma';
 
 export async function getServerSideProps(context) {
@@ -61,7 +63,7 @@ export async function getServerSideProps(context) {
 
 export default function Transactions({ user, transactions, categories, accounts }) {
   const { data: session, status } = useSession({ required: true });
-
+  const router = useRouter();
   if (status == 'authenticated') {
     const date = new Date();
 
@@ -78,6 +80,14 @@ export default function Transactions({ user, transactions, categories, accounts 
         </Head>
         <InternalNavBar user={user}>
           <main>
+            {router.query?.message ? (
+              <Alert
+                message={router.query.message}
+                alertType={router.query.messageType}
+              />
+            ) : (
+              ''
+            )}
             <div className="justify-between" id="title-div">
               <div className="flex">
                 <article className="prose">

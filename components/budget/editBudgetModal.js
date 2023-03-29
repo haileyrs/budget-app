@@ -35,7 +35,16 @@ export default function EditBudget({ id, name, amount }) {
         body: JSON.stringify({ id: id })
       });
       const result = await response.json();
-      await Router.push('/tabs/budgets');
+      await Router.push(
+        {
+          pathname: '/tabs/budgets',
+          query: {
+            messageType: 'success',
+            message: 'Budget was successfully deleted'
+          }
+        },
+        '/tabs/budgets'
+      );
     } catch (error) {
       console.log(error);
     }

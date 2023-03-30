@@ -2,24 +2,24 @@ import styles from './settings.module.css';
 import ButtonLayout from '../addNewButtonLayout';
 import EditCategory from './editCategoryModal';
 import DeleteCategory from './deleteCategoryModal';
+import ModalAlert from '../modalAlert';
 import Router from 'next/router';
+import { useState } from 'react';
 
-export default function CategorySettings({ categories = [], user}) {
+export default function CategorySettings({ categories = [], user }) {
+  const [show, setShow] = useState(false);
+
   const categoryNames = categories.map((c) => c.name);
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (categories.find((c) => event.target.name.value == c.name)) {
-      // will probably move this
-      await Router.push(
-        {
-          pathname: '/settings',
-          query: {
-            messageType: 'warning',
-            message: 'A category with that name already exists'
-          }
-        },
-        '/settings'
-      );
+      setShow(true);
+      const time = setTimeout(() => {
+        setShow(false);
+      }, 5000);
+      return () => {
+        clearTimeout(time);
+      };
     } else {
       try {
         const data = {
@@ -44,7 +44,7 @@ export default function CategorySettings({ categories = [], user}) {
           '/settings'
         );
         document.getElementById('catForm').reset();
-        document.activeElement.blur()
+        document.activeElement.blur();
       } catch (error) {
         console.log(error);
         await Router.push(
@@ -82,7 +82,17 @@ export default function CategorySettings({ categories = [], user}) {
       );
     } catch (error) {
       console.log(error);
-    }  
+      await Router.push(
+        {
+          pathname: '/settings',
+          query: {
+            messageType: 'error',
+            message: 'Category could not be added'
+          }
+        },
+        '/settings'
+      );
+    }
   };
 
   return (
@@ -104,7 +114,7 @@ export default function CategorySettings({ categories = [], user}) {
                 <p className="italic font-semibold text-primary">
                   Add a category
                 </p>
-                <div className="flex flex-row pt-1">
+                <div className="flex flex-row py-1">
                   <form id="catForm" onSubmit={handleSubmit}>
                     <input
                       type="text"
@@ -119,6 +129,15 @@ export default function CategorySettings({ categories = [], user}) {
                     </button>
                   </form>
                 </div>
+                {show ? (
+                  <ModalAlert
+                    alertType="warning"
+                    message="This category already exists"
+                    handleClose={() => setShow(false)}
+                  />
+                ) : (
+                  ''
+                )}
               </div>
             </div>
           </div>

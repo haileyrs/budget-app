@@ -1,8 +1,19 @@
 import Modal from '../modalTemplate';
+import ModalAlert from '../modalAlert';
 import styles from './budget.module.css';
 import Router from 'next/router';
+import { useState } from 'react';
 
 export default function EditBudget({ id, name, amount }) {
+  const [show, setShow] = useState(false);
+  const timer = () => {
+    const time = setTimeout(() => {
+      setShow(false), document.getElementById(id).click();
+    }, 3000);
+    return () => {
+      clearTimeout(time);
+    };
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -20,9 +31,20 @@ export default function EditBudget({ id, name, amount }) {
 
       const result = await response.json();
       document.getElementById(id).click();
-      await Router.push('/tabs/budgets');
+      await Router.push(
+        {
+          pathname: '/tabs/budgets',
+          query: {
+            messageType: 'success',
+            message: 'Budget was successfully updated'
+          }
+        },
+        '/tabs/budgets'
+      );
     } catch (error) {
       console.log(error);
+      setShow(true);
+      timer();
     }
   };
 
@@ -53,6 +75,15 @@ export default function EditBudget({ id, name, amount }) {
   return (
     <>
       <Modal title="Edit Budget" control={id}>
+        {show ? (
+          <ModalAlert
+            alertType="error"
+            message="Budget item could not be updated"
+            handleClose={() => setShow(false)}
+          />
+        ) : (
+          ''
+        )}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
             <div className={styles.inputdiv}>

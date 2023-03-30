@@ -21,7 +21,7 @@ export default function DeleteCategory({ category, allCategories }) {
             body: JSON.stringify(data)
           });
         }
-      };
+      }
 
       if (category.Transaction.length) {
         for (const t of category.Transaction) {
@@ -35,8 +35,8 @@ export default function DeleteCategory({ category, allCategories }) {
             body: JSON.stringify(data)
           });
         }
-      };
-      
+      }
+
       const response = await fetch(`/api/category`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -44,7 +44,16 @@ export default function DeleteCategory({ category, allCategories }) {
       });
       const result = await response.json();
       document.getElementById('delete-category' + category.id).click();
-      await Router.push('/settings');
+      await Router.push(
+        ({
+          pathname: '/settings',
+          query: {
+            messageType: 'success',
+            message: 'Category deleted successfully'
+          }
+        },
+        '/settings')
+      );
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +69,16 @@ export default function DeleteCategory({ category, allCategories }) {
       });
       const result = await response.json();
       document.getElementById('delete-category' + category.id).click();
-      await Router.push('/settings');
+      await Router.push(
+        ({
+          pathname: '/settings',
+          query: {
+            messageType: 'success',
+            message: 'Category deleted successfully'
+          }
+        },
+        '/settings')
+      );
     } catch (error) {
       console.log(error);
     }
@@ -98,14 +116,11 @@ export default function DeleteCategory({ category, allCategories }) {
             </div>
           </div>
           <div className="modal-action m-1">
-            <button
-              className="btn btn-error"
-              onClick={(e) => removeAssoc(e)}
-            >
+            <button className="btn btn-error" onClick={(e) => removeAssoc(e)}>
               Delete Associations
             </button>
             <button className="btn" type="submit">
-              Save
+              Move & Delete
             </button>
           </div>
         </form>

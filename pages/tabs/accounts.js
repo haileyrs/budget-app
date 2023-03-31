@@ -89,7 +89,9 @@ export default function Accounts({ accounts, user }) {
                 Click on an account card to update it.
               </p>
             </div>
-
+            {accounts.length == 0 ? (
+              <p>You have not added any accounts yet</p>
+            ) : ''}
             <div className="account-group">
               <div className="divider">Checking & Savings</div>
               {checkingSavings.map((account) => (

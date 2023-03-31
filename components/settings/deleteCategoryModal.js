@@ -1,8 +1,20 @@
 import Modal from '../modalTemplate';
+import ModalAlert from '../modalAlert';
 import styles from './settings.module.css';
 import Router from 'next/router';
+import { useState } from 'react';
 
 export default function DeleteCategory({ category, allCategories }) {
+  const [show, setShow] = useState(false);
+  const timer = () => {
+    const time = setTimeout(() => {
+      setShow(false);
+    }, 5000);
+    return () => {
+      clearTimeout(time);
+    };
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const newCategory = allCategories.find(
@@ -56,6 +68,8 @@ export default function DeleteCategory({ category, allCategories }) {
       );
     } catch (error) {
       console.log(error);
+      setShow(true);
+      timer();
     }
   };
 
@@ -81,6 +95,8 @@ export default function DeleteCategory({ category, allCategories }) {
       );
     } catch (error) {
       console.log(error);
+      setShow(true);
+      timer();
     }
   };
 
@@ -90,6 +106,15 @@ export default function DeleteCategory({ category, allCategories }) {
         title={'Delete Category: ' + category.name}
         control={'delete-category' + category.id}
       >
+        {show ? (
+          <ModalAlert
+            alertType="error"
+            message="Category could not be deleted"
+            handleClose={() => setShow(false)}
+          />
+        ) : (
+          ''
+        )}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
             <div className="col-span-4 pb-2">

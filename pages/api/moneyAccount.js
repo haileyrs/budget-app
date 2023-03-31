@@ -28,10 +28,10 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'PUT') {
-      const { id, name, type, value } = req.body;
+      const { accountId, name, type, value } = req.body;
       const updateaccount = await prisma.moneyAccount.update({
         where: {
-          id: id
+          id: accountId
         },
         data: {
           name: name,
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method == 'DELETE') {
-      const accountId = req.body;
+      const { accountId } = req.body;
       const deleteaccount = await prisma.moneyAccount.delete({
         where: {
           id: accountId

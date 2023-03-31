@@ -3,6 +3,7 @@ import styles from './transaction.module.css';
 import { useState } from 'react';
 import Router from 'next/router';
 import DatePicker from 'tailwind-datepicker-react';
+import { datePickerOptions } from '@/utils/helpers';
 
 export default function AddTransaction({ user, categories, accounts }) {
   const handleSubmit = async (event) => {
@@ -47,34 +48,12 @@ export default function AddTransaction({ user, categories, accounts }) {
     }
   };
   
-  const [show, setShow] = useState(false);  
+  const [showDate, setShowDate] = useState(false);  
   const [selectedDate, setSelectedDate] = useState()
   const handleChange = (selectedDate) => {
     setSelectedDate(selectedDate)
   };
-  const options = {
-    autoHide: true,
-    todayBtn: false,
-    clearBtn: true,
-    maxDate: new Date('2030-01-01'),
-    minDate: new Date('1950-01-01'),
-    theme: {
-      background: '',
-      todayBtn: '',
-      clearBtn:
-        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content',
-      icons: '',
-      text: '',
-      disabledText: 'text-secondary dark:text-secondary',
-      input: 'bg-base-100 text-neutral border-primary dark:bg-base-100 dark:text-neutral dark:border-primary',
-      inputIcon: '',
-      selected:
-        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content'
-    },
-    defaultDate: new Date(),
-    language: 'en'
-  };
-
+  
   return (
     <>
       <Modal title="Add Transaction" control="add-transaction-modal">
@@ -133,9 +112,9 @@ export default function AddTransaction({ user, categories, accounts }) {
             </div>
             <div className={styles.inputdiv}>
               <DatePicker
-                show={show}
-                setShow={(state) => setShow(state)}
-                options={options}
+                show={showDate}
+                setShow={(state) => setShowDate(state)}
+                options={datePickerOptions()}
                 onChange={handleChange}
               />
               {/* <div>

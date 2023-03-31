@@ -1,19 +1,31 @@
 import Modal from '../modalTemplate';
+import ModalAlert from '../modalAlert';
 import styles from './account.module.css';
 import Router from 'next/router';
+import { useState } from 'react';
 
 export default function EditAccount({ id, name, type, amount, plaid }) {
-  let apiErr = false
-  let errMessage = '';
+  const [show, setShow] = useState(false);
+  const timer = () => {
+    const time = setTimeout(() => {
+      setShow(false);
+    }, 5000);
+    return () => {
+      clearTimeout(time);
+    };
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
       const data = {
-        id: id,
+        accountId: id,
         name: event.target.name.value != '' ? event.target.name.value : name,
         type: type,
-        value: event.target.amount.value != '' ? parseFloat(event.target.amount.value) : amount
+        value:
+          event.target.amount.value != ''
+            ? parseFloat(event.target.amount.value)
+            : amount
       };
       if (data.type == 'Loan' || data.type == 'Credit') {
         if (data.value > 0) {
@@ -28,12 +40,20 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
 
       const result = await response.json();
       document.getElementById(id).click();
-      // console.log(result)
-      await Router.push('/tabs/accounts');
+      await Router.push(
+        {
+          pathname: '/tabs/accounts',
+          query: {
+            messageType: 'success',
+            message: 'Account was successfully updated'
+          }
+        },
+        '/tabs/accounts'
+      );
     } catch (error) {
       console.log(error);
-      errMessage = 'There was an error updating this account.'
-      apiErr = true;
+      setShow(true);
+      timer();
     }
   };
 
@@ -43,10 +63,10 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
       const response = await fetch(`/api/moneyAccount`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: id })
+        body: JSON.stringify({ accountId: id })
       });
       const result = await response.json();
-      console.log(result);
+      
       await Router.push(
         {
           pathname: '/tabs/accounts',
@@ -59,8 +79,8 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
       );
     } catch (error) {
       console.log(error);
-      errMessage = 'There was an error deleting this account.'
-      apiErr = true;
+      setShow(true);
+      timer();
     }
   };
 
@@ -68,6 +88,15 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
   return (
     <>
       <Modal title="Update Account" control={id}>
+        {show ? (
+          <ModalAlert
+            alertType="error"
+            message="Account could not be updated"
+            handleClose={() => setShow(false)}
+          />
+        ) : (
+          ''
+        )}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
             <div className={styles.inputdiv}>

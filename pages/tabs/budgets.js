@@ -137,17 +137,21 @@ export default function Budgets({
             </div>
 
             <div className="flex flex-col">
-              {budgets.map((budget) => (
-                <div key={budget.id} className="w-full">
-                  <BudgetWidget
-                    key={budget.id}
-                    id={budget.id}
-                    name={budget.category.name}
-                    value={budget.value}
-                    max={budget.max}
-                  />
-                </div>
-              ))}
+              {budgets.length == 0 ? (
+                <p>There are no budgets for this month</p>
+              ) : (
+                budgets.map((budget) => (
+                  <div key={budget.id} className="w-full">
+                    <BudgetWidget
+                      key={budget.id}
+                      id={budget.id}
+                      name={budget.category.name}
+                      value={budget.value}
+                      max={budget.max}
+                    />
+                  </div>
+                ))
+              )}
             </div>
             <AddBudget user={user} categories={availableCategories} />
           </main>

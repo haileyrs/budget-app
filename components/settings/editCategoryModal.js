@@ -1,8 +1,20 @@
 import Modal from '../modalTemplate';
+import ModalAlert from '../modalAlert';
 import styles from './settings.module.css';
 import Router from 'next/router';
+import { useState } from 'react';
 
 export default function EditCategory({ category, catNames }) {
+  const [show, setShow] = useState(false);
+  const timer = () => {
+    const time = setTimeout(() => {
+      setShow(false);
+    }, 5000);
+    return () => {
+      clearTimeout(time);
+    };
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (catNames.includes(event.target.name.value)) {
@@ -21,16 +33,38 @@ export default function EditCategory({ category, catNames }) {
 
         const result = await response.json();
         document.getElementById('edit-category' + category.id).click();
-        await Router.push('/settings');
+        await Router.push(
+          {
+            pathname: '/settings',
+            query: {
+              messageType: 'success',
+              message: 'Category updated successfully'
+            }
+          },
+          '/settings'
+        );
       } catch (error) {
-        console.log(error);
+        setShow(true);
+        timer();
       }
     } 
   };
 
   return (
     <>
-      <Modal title={'Edit Category: ' + category.name} control={'edit-category'+category.id}>
+      <Modal
+        title={'Edit Category: ' + category.name}
+        control={'edit-category' + category.id}
+      >
+        {show ? (
+          <ModalAlert
+            alertType="error"
+            message="Category could not be updated"
+            handleClose={() => setShow(false)}
+          />
+        ) : (
+          ''
+        )}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
             <div className="col-span-4 pb-2">

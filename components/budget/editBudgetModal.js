@@ -8,8 +8,8 @@ export default function EditBudget({ id, name, amount }) {
   const [show, setShow] = useState(false);
   const timer = () => {
     const time = setTimeout(() => {
-      setShow(false), document.getElementById(id).click();
-    }, 3000);
+      setShow(false)
+    }, 5000);
     return () => {
       clearTimeout(time);
     };
@@ -69,6 +69,8 @@ export default function EditBudget({ id, name, amount }) {
       );
     } catch (error) {
       console.log(error);
+      setShow(true);
+      timer();
     }
   };
 

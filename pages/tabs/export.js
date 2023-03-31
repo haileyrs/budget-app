@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import prisma from '@/lib/prisma';
+import { datePickerOptions } from '@/utils/helpers';
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
@@ -37,28 +38,6 @@ export default function Export({ accounts, user }) {
 
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
-  const options = {
-    autoHide: true,
-    todayBtn: false,
-    clearBtn: true,
-    maxDate: new Date('2030-01-01'),
-    minDate: new Date('1950-01-01'),
-    theme: {
-      background: '',
-      todayBtn: '',
-      clearBtn:
-        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content',
-      icons: '',
-      text: '',
-      disabledText: 'dark:text-base-300',
-      input: '',
-      inputIcon: '',
-      selected:
-        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content'
-    },
-    defaultDate: new Date(),
-    language: 'en'
-  };
 
   if (status == 'authenticated') {
     return (
@@ -96,14 +75,14 @@ export default function Export({ accounts, user }) {
                   <DatePicker
                     show={show1}
                     setShow={(state) => setShow1(state)}
-                    options={options}
+                    options={datePickerOptions()}
                     onChange={handleDate1}
                   />
                   <p>TO</p>
                   <DatePicker
                     show={show2}
                     setShow={(state) => setShow2(state)}
-                    options={options}
+                    options={datePickerOptions()}
                     onChange={handleDate2}
                   />
                 </div>

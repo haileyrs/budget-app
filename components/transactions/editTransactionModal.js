@@ -1,8 +1,10 @@
 import Modal from '../modalTemplate';
+import ModalAlert from '../modalAlert';
 import styles from './transaction.module.css';
 import { useState } from 'react';
 import Router from 'next/router';
 import DatePicker from 'tailwind-datepicker-react';
+import { datePickerOptions } from '@/utils/helpers';
 
 export default function EditTransaction({
   id,
@@ -14,6 +16,16 @@ export default function EditTransaction({
   accounts,
   categories
 }) {
+
+  const [show, setShow] = useState(false);
+  const timer = () => {
+    const time = setTimeout(() => {
+      setShow(false);
+    }, 5000);
+    return () => {
+      clearTimeout(time);
+    };
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -58,10 +70,20 @@ export default function EditTransaction({
 
       const result = await response.json();
       document.getElementById(id).click();
-      // console.log(result)
-      await Router.push('/tabs/transactions');
+      await Router.push(
+        {
+          pathname: '/tabs/transactions',
+          query: {
+            messageType: 'success',
+            message: 'Transaction was successfully updated'
+          }
+        },
+        '/tabs/transactions'
+      );
     } catch (error) {
       console.log(error);
+      setShow(true);
+      timer();
     }
   };
 
@@ -86,41 +108,29 @@ export default function EditTransaction({
       );
     } catch (error) {
       console.log(error);
+      setShow(true);
+      timer();
     }
   };
 
-  const [show, setShow] = useState(false);
+  const [showDate, setShowDate] = useState(false);
   const [selectedDate, setSelectedDate] = useState();
   const handleChange = (selectedDate) => {
     setSelectedDate(selectedDate);
-  };
-  const options = {
-    autoHide: true,
-    todayBtn: false,
-    clearBtn: true,
-    maxDate: new Date('2030-01-01'),
-    minDate: new Date('1950-01-01'),
-    theme: {
-      background: '',
-      todayBtn: '',
-      clearBtn:
-        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content',
-      icons: '',
-      text: '',
-      disabledText: 'text-secondary dark:text-secondary',
-      input:
-        'bg-base-100 text-neutral border-primary dark:bg-base-100 dark:text-neutral dark:border-primary',
-      inputIcon: '',
-      selected:
-        'bg-primary text-primary-content dark:bg-primary dark:text-primary-content'
-    },
-    defaultDate: new Date(date),
-    language: 'en'
   };
 
   return (
     <>
       <Modal title="Update Transaction" control={id}>
+        {show ? (
+          <ModalAlert
+            alertType="error"
+            message="Transaction could not be updated"
+            handleClose={() => setShow(false)}
+          />
+        ) : (
+          ''
+        )}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
             <div className={styles.inputdiv}>
@@ -170,9 +180,9 @@ export default function EditTransaction({
             </div>
             <div className={styles.inputdiv}>
               <DatePicker
-                show={show}
-                setShow={(state) => setShow(state)}
-                options={options}
+                show={showDate}
+                setShow={(state) => setShowDate(state)}
+                options={datePickerOptions(date)}
                 onChange={handleChange}
               />
             </div>

@@ -41,7 +41,7 @@ export async function getServerSideProps(context) {
         select: { name: true, id: true }
       },
       moneyAccount: {
-        select: { name: true }
+        select: { name: true, type: true }
       }
     }
   });
@@ -69,6 +69,8 @@ export default function Summary({ user, accounts, budgets, transactions }) {
     let spent = 0;
     let monthRange = "";
     let monthSpend = 0;
+    let monthChange = 0;
+    let toSavings = 0;
 
     const today = new Date();
     const month = today.toLocaleString('default', { month: 'long' });
@@ -96,8 +98,19 @@ export default function Summary({ user, accounts, budgets, transactions }) {
       transactions.forEach((t => {
         if (t.amount < 0) {
           monthSpend += t.amount * -1;
-        }
+        };
+        monthChange += t.amount
       }))
+      
+      if (monthChange > 0) {
+        monthChange = '+' + monthChange;
+      };
+
+      transactions.map((e) => {
+        if (e.moneyAccount.type === "Savings") {
+          toSavings += e.amount
+        }  
+      });
     };
 
     return (
@@ -118,13 +131,17 @@ export default function Summary({ user, accounts, budgets, transactions }) {
               <div className="stats stats-vertical md:col-span-2 sm:stats-horizontal shadow">
                 <div className="stat">
                   <div className="stat-title">Net Worth</div>
-                  <div className="stat-value">${netWorth}</div>
-                  <div className="stat-desc">Month Change: +3.1K</div>
+                  <div className="stat-value">
+                    ${netWorth.toLocaleString('en-US')}
+                  </div>
+                  <div className="stat-desc">Month Change: {monthChange}</div>
                 </div>
 
                 <div className="stat">
                   <div className="stat-title">Monthly Spend</div>
-                  <div className="stat-value">${monthSpend.toFixed(2)}</div>
+                  <div className="stat-value">
+                    ${monthSpend.toLocaleString('en-US')}
+                  </div>
                   <div className="stat-desc">{monthRange}</div>
                 </div>
 
@@ -138,7 +155,7 @@ export default function Summary({ user, accounts, budgets, transactions }) {
                 <div className="card bg-base-100 shadow-xl">
                   <div className="card-body">
                     <h2 className="card-title">Saved This Month</h2>
-                    <p>I'm not sure what this number should be</p>
+                    <p>${toSavings.toLocaleString('en-US')}</p>
                     <div className="card-actions justify-end">
                       <Link href="/tabs/accounts/">
                         <label className="btn">Check It Out</label>

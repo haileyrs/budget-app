@@ -15,6 +15,10 @@ export async function getServerSideProps(context) {
     where: { email: session.user.email }
   });
 
+  let today = new Date();
+  let y = today.getFullYear();
+  let m = today.getMonth();
+
   const categories = await prisma.category.findMany({
     where: { userId: user.id },
     include: {
@@ -28,7 +32,7 @@ export async function getServerSideProps(context) {
   });
 
   const budgets = await prisma.budget.findMany({
-    where: { userId: user.id },
+    where: { AND: [{ userId: user.id }, { month: m }, { year: y }] },
     include: {
       category: {
         select: { name: true, id: true }
@@ -36,32 +40,46 @@ export async function getServerSideProps(context) {
     }
   });
 
+  const recurringBudgets = await prisma.recurringBudget.findMany({
+    where: { userId: user.id },
+    include: {
+      category: {
+        select: { name: true, id: true}
+      }
+    }
+  })
+
   return {
     props: {
       categories: categories,
       budgets: budgets,
+      recurringBudgets: recurringBudgets,
       user: user
     }
   };
 }
 
-export default function Settings({ user, categories, budgets }) {
+export default function Settings({ user, categories, recurringBudgets, budgets }) {
   const { data: session, status } = useSession({ required: true });
   const router = useRouter();
 
   if (status == 'authenticated') {
-    // const budgetTab = () => {
-    //   document.getElementById('categorySettings').className = 'hidden';
-    //   document.getElementById('budgetSettings').className = '';
-    //   document.getElementById('budgetTab').className = 'tab tab-bordered tab-active';
-    //   document.getElementById('categoryTab').className = 'tab tab-bordered';
-    // };
+    const budgetTab = () => {
+      document.getElementById('categorySettings').className = 'hidden';
+      document.getElementById('budgetSettings').className = '';
+      document.getElementById('budgetTab').className = 'tab tab-bordered tab-active';
+      document.getElementById('categoryTab').className = 'tab tab-bordered';
+    };
     const categoryTab = () => {
-      // document.getElementById('budgetSettings').className = 'hidden';
+      document.getElementById('budgetSettings').className = 'hidden';
       document.getElementById('categorySettings').className = '';
       document.getElementById('categoryTab').className =
         'tab tab-bordered tab-active';
-      // document.getElementById('budgetTab').className = 'tab tab-bordered';
+      document.getElementById('budgetTab').className = 'tab tab-bordered';
+    };
+
+    if (router.query?.tab) {
+      router.query.tab === 'budget' ? budgetTab() : ''
     };
 
     return (
@@ -92,21 +110,21 @@ export default function Settings({ user, categories, budgets }) {
               >
                 Categories
               </button>
-              {/* <button
+              <button
                 id="budgetTab"
                 className="tab tab-bordered"
                 onClick={budgetTab}
               >
                 Budgets
-              </button> */}
+              </button>
             </div>
             <div className="settings-container">
               <div id="categorySettings">
                 <CategorySettings categories={categories} user={user} />
               </div>
-              {/* <div id="budgetSettings" className="hidden">
-                <BudgetSettings budgets={budgets} />
-              </div> */}
+              <div id="budgetSettings" className="hidden">
+                <BudgetSettings recurringBudgets={recurringBudgets} categories={categories} user={user} />
+              </div>
             </div>
           </main>
         </InternalNavBar>

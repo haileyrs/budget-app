@@ -155,7 +155,9 @@ export default function Summary({ user, accounts, budgets, transactions }) {
                 <div className="card bg-base-100 shadow-xl">
                   <div className="card-body">
                     <h2 className="card-title">Saved This Month</h2>
-                    <p>${toSavings.toLocaleString('en-US')}</p>
+                    <div className="stat-value text-primary">
+                      ${toSavings.toLocaleString('en-US')}
+                    </div>
                     <div className="card-actions justify-end">
                       <Link href="/tabs/accounts/">
                         <label className="btn">Check It Out</label>

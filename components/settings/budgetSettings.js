@@ -1,47 +1,84 @@
 import styles from './settings.module.css';
 import ButtonLayout from '../addNewButtonLayout';
+import EditRecurringBudget from './editRecurringBudget';
+import Router from 'next/router';
 
-export default function BudgetSettings({ budgets = [] }) {
+export default function BudgetSettings({ recurringBudgets = [], categories = [], user }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // if (categories.find((c) => event.target.name.value == c.name)) {
-    //   catError = true;
-    // } else {
-    //   try {
-    //     const data = {
-    //       name: event.target.name.value
-    //     };
-    //     const response = await fetch(`/api/category`, {
-    //       method: 'POST',
-    //       headers: { 'Content-Type': 'application/json' },
-    //       body: JSON.stringify(data)
-    //     });
-
-    //     const result = await response.json();
-    //     await Router.push('/settings');
-        // document.getElementById('budgetForm').reset();
-        // document.activeElement.blur();
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
+    try {
+      const category = categories.find(
+        (e) => e.name == event.target.category.value
+      );
+      const data = {
+        userId: user.id,
+        categoryId: category.id,
+        max: parseFloat(event.target.max.value)
+      };
+      const response = await fetch(`/api/recurringBudget`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      await Router.push(
+        {
+          pathname: '/settings',
+          query: {
+            messageType: 'success',
+            message: 'Recurring budget added successfully',
+            tab: 'budget'
+          }
+        },
+        '/settings'
+      );
+    document.getElementById('budgetForm').reset();
+    document.activeElement.blur();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const removeCategory = async (id, e) => {
-    e.preventDefault();
-    // try {
-    //   const response = await fetch(`/api/category`, {
-    //     method: 'DELETE',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ categoryId: id })
-    //   });
-    //   const result = await response.json();
-    //   await Router.push('/settings');
-    // } catch (error) {
-    //   console.log(error);
-    // }
+  const removeBudget = async (event, b) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(`/api/recurringBudget`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: b.id })
+      });
+      const result = await response.json();
+      await Router.push(
+        {
+          pathname: '/settings',
+          query: {
+            messageType: 'success',
+            message: 'Recurring budget was successfully deleted',
+            tab: 'budget'
+          }
+        },
+        '/settings'
+      );
+    } catch (error) {
+      console.log(error);
+      await Router.push(
+        {
+          pathname: '/settings',
+          query: {
+            messageType: 'error',
+            message: 'Recurring budget could not be added',
+            tab: 'budget'
+          }
+        },
+        '/settings'
+      );
+    }
   };
+
+  const budgetCategories = recurringBudgets.map((b) => b.category.name);
+  const availableCategories = categories.filter(
+    (c) => !budgetCategories.includes(c.name)
+  );
 
   return (
     <>
@@ -64,18 +101,22 @@ export default function BudgetSettings({ budgets = [] }) {
                 </p>
                 <div className="flex flex-row pt-1">
                   <form id="budgetForm" onSubmit={handleSubmit}>
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
-                      placeholder="budget name"
-                      className="input input-bordered input-primary w-full my-1"
+                    <select
+                      id="category"
+                      name="category"
+                      className="select select-primary w-full max-w-xs"
+                      defaultValue="category"
                       required
-                    />
+                    >
+                      <option disabled>category</option>
+                      {availableCategories.map((c) => (
+                        <option key={c.id}>{c.name}</option>
+                      ))}
+                    </select>
                     <input
                       type="number"
-                      name="name"
-                      id="name"
+                      name="max"
+                      id="max"
                       placeholder="limit"
                       className="input input-bordered input-primary w-1/2 my-1"
                       required
@@ -90,39 +131,44 @@ export default function BudgetSettings({ budgets = [] }) {
           </div>
         </div>
       </div>
-      <div className="flex w-full overflow-x-auto col-span-1 sm:col-span-2">
-        <table className="table table-zebra table-compact w-full">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Limit</th>
-              <th>Options</th>
-            </tr>
-          </thead>
-          <tbody>
-            {budgets.map((b) => (
-              <tr key={b.id}>
-                <th>{b.category.name}</th>
-                <td>${b.max}</td>
-                <td>
-                  <label
-                    onClick={(e) => removeCategory(c.id, e)}
-                    className="btn btn-sm mr-2"
-                  >
-                    Edit
-                  </label>
-                  <label
-                    onClick={(e) => removeCategory(c.id, e)}
-                    className="btn btn-sm btn-error"
-                  >
-                    Delete
-                  </label>
-                </td>
+      {recurringBudgets.length === 0 ? (
+        <p>No recurring budgets have been added.</p>
+      ) : (
+        <div className="flex w-full overflow-x-auto col-span-1 sm:col-span-2">
+          <table className="table table-zebra table-compact w-full">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Limit</th>
+                <th>Options</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {recurringBudgets.map((b) => (
+                <tr key={b.id}>
+                  <th>{b.category.name}</th>
+                  <td>${b.max.toFixed(2)}</td>
+                  <td>
+                    <label
+                      htmlFor={'edit-budget' + b.id}
+                      className="btn btn-sm mr-2"
+                    >
+                      Edit
+                    </label>
+                    <EditRecurringBudget budget={b} />
+                    <label
+                      onClick={(event) => removeBudget(event, b)}
+                      className="btn btn-sm btn-error"
+                    >
+                      Delete
+                    </label>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 }

@@ -15,10 +15,6 @@ export async function getServerSideProps(context) {
     where: { email: session.user.email }
   });
 
-  let today = new Date();
-  let y = today.getFullYear();
-  let m = today.getMonth();
-
   const categories = await prisma.category.findMany({
     where: { userId: user.id },
     include: {
@@ -27,15 +23,6 @@ export async function getServerSideProps(context) {
       },
       Budget: {
         select: { id: true }
-      }
-    }
-  });
-
-  const budgets = await prisma.budget.findMany({
-    where: { AND: [{ userId: user.id }, { month: m }, { year: y }] },
-    include: {
-      category: {
-        select: { name: true, id: true }
       }
     }
   });
@@ -52,14 +39,13 @@ export async function getServerSideProps(context) {
   return {
     props: {
       categories: categories,
-      budgets: budgets,
       recurringBudgets: recurringBudgets,
       user: user
     }
   };
 }
 
-export default function Settings({ user, categories, recurringBudgets, budgets }) {
+export default function Settings({ user, categories, recurringBudgets }) {
   const { data: session, status } = useSession({ required: true });
   const router = useRouter();
 

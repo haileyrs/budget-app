@@ -22,7 +22,7 @@ export async function getServerSideProps(context) {
   const accounts = await prisma.moneyAccount.findMany({
     where: { userId: user.id }
   });
-  const budgets = await prisma.budget.findMany({
+  let budgets = await prisma.budget.findMany({
     where: {
       AND: [{ userId: user.id }, { month: m }, { year: y }]
     },
@@ -47,6 +47,43 @@ export async function getServerSideProps(context) {
   });
 
   transactions.sort((t, a) => new Date(a.date) - new Date(t.date));
+
+  const recurringBudgets = await prisma.recurringBudget.findMany({
+    where: { userId: user.id },
+    include: {
+      category: {
+        select: { name: true, id: true }
+      }
+    }
+  });
+
+  if (recurringBudgets.length) {
+    const catsWithBudget = budgets.map((b) => b.category.id);
+    for (const b of recurringBudgets) {
+      if (!catsWithBudget.includes(b.category.id)) {
+        const newBudget = await prisma.budget.create({
+          data: {
+            userId: user.id,
+            categoryId: b.category.id,
+            max: b.max,
+            value: 0,
+            month: m,
+            year: y
+          }
+        })
+      }
+    }
+    budgets = await prisma.budget.findMany({
+      where: {
+        AND: [{ userId: user.id }, { month: m }, { year: y }]
+      },
+      include: {
+        category: {
+          select: { name: true, id: true }
+        }
+      }
+    });
+  };
 
   return {
     props: {

@@ -1,5 +1,5 @@
 import Modal from '../modalTemplate';
-import ModalAlert from '../modalAlert';
+import Alert from '../alert';
 import styles from './budget.module.css';
 import Router from 'next/router';
 import { useState } from 'react';
@@ -78,7 +78,7 @@ export default function EditBudget({ id, name, amount }) {
     <>
       <Modal title="Edit Budget" control={id}>
         {show ? (
-          <ModalAlert
+          <Alert
             alertType="error"
             message="Budget item could not be updated"
             handleClose={() => setShow(false)}

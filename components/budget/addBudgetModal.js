@@ -21,7 +21,6 @@ export default function AddBudget({ user, categories }) {
       });
 
       const result = await response.json();
-      console.log(result);
       document.getElementById('add-budget-modal').click();
       await Router.push(
         {

@@ -1,5 +1,5 @@
 import Modal from '../modalTemplate';
-import ModalAlert from '../modalAlert';
+import Alert from '../alert';
 import styles from './settings.module.css';
 import Router from 'next/router';
 import { useState } from 'react';
@@ -57,7 +57,7 @@ export default function EditCategory({ category, catNames }) {
         control={'edit-category' + category.id}
       >
         {show ? (
-          <ModalAlert
+          <Alert
             alertType="error"
             message="Category could not be updated"
             handleClose={() => setShow(false)}

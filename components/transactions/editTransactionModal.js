@@ -1,5 +1,5 @@
 import Modal from '../modalTemplate';
-import ModalAlert from '../modalAlert';
+import Alert from '../alert';
 import styles from './transaction.module.css';
 import { useState } from 'react';
 import Router from 'next/router';
@@ -123,7 +123,7 @@ export default function EditTransaction({
     <>
       <Modal title="Update Transaction" control={id}>
         {show ? (
-          <ModalAlert
+          <Alert
             alertType="error"
             message="Transaction could not be updated"
             handleClose={() => setShow(false)}

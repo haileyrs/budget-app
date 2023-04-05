@@ -1,5 +1,5 @@
 import Modal from '../modalTemplate';
-import ModalAlert from '../modalAlert';
+import Alert from '../alert';
 import styles from './settings.module.css';
 import Router from 'next/router';
 import { useState } from 'react';
@@ -107,7 +107,7 @@ export default function DeleteCategory({ category, allCategories }) {
         control={'delete-category' + category.id}
       >
         {show ? (
-          <ModalAlert
+          <Alert
             alertType="error"
             message="Category could not be deleted"
             handleClose={() => setShow(false)}

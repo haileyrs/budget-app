@@ -1,21 +1,8 @@
-import { useState, useEffect } from 'react';
-
-export default function Alert({ message, alertType }) {
-  const [show, setShow] = useState(true);
-  useEffect(() => {
-    const time = setTimeout(() => {
-      setShow(false)
-    }, 5000)
-    return () => {
-      clearTimeout(time)
-    }
-  }, []);
-
-  const handleClose = (e) => {
-    e.preventDefault();
-    setShow(false);
-  };
-
+export default function Alert({
+  message = '',
+  alertType = 'info',
+  handleClose
+}) {
   const alertTypeClass = {
     info: {
       class: 'alert alert-info mb-1',
@@ -34,50 +21,48 @@ export default function Alert({ message, alertType }) {
       svg: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'
     }
   };
-  if (show) {
-    return (
-      <>
-        <div className={alertTypeClass[alertType].class}>
-          <div>
+  // if (show) {
+  return (
+    <>
+      <div className={alertTypeClass[alertType].class}>
+        <div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="stroke-current flex-shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d={alertTypeClass[alertType].svg}
+            />
+          </svg>
+          <span>{message}</span>
+        </div>
+        <div className="flex-none">
+          <button
+            onClick={handleClose}
+            className="btn btn-xs btn-circle btn-ghost"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="stroke-current flex-shrink-0 h-6 w-6"
+              className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d={alertTypeClass[alertType].svg}
+                d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-            <span>{message}</span>
-          </div>
-          <div className="flex-none">
-            <button
-              onClick={handleClose}
-              className="btn btn-xs btn-circle btn-ghost"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
+          </button>
         </div>
-      </>
-    );
-  };
-  return null;
+      </div>
+    </>
+  );
 }

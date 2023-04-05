@@ -1,5 +1,5 @@
 import Modal from '../modalTemplate';
-import ModalAlert from '../modalAlert';
+import Alert from '../alert';
 import styles from './account.module.css';
 import Router from 'next/router';
 import { useState } from 'react';
@@ -84,12 +84,11 @@ export default function EditAccount({ id, name, type, amount, plaid }) {
     }
   };
 
-
   return (
     <>
       <Modal title="Update Account" control={id}>
         {show ? (
-          <ModalAlert
+          <Alert
             alertType="error"
             message="Account could not be updated"
             handleClose={() => setShow(false)}

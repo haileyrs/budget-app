@@ -2,7 +2,7 @@ import styles from './settings.module.css';
 import ButtonLayout from '../addNewButtonLayout';
 import EditCategory from './editCategoryModal';
 import DeleteCategory from './deleteCategoryModal';
-import ModalAlert from '../modalAlert';
+import Alert from '../alert';
 import Router from 'next/router';
 import { useState } from 'react';
 
@@ -130,7 +130,7 @@ export default function CategorySettings({ categories = [], user }) {
                   </form>
                 </div>
                 {show ? (
-                  <ModalAlert
+                  <Alert
                     alertType="warning"
                     message="This category already exists"
                     handleClose={() => setShow(false)}

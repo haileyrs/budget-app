@@ -9,6 +9,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import prisma from '@/lib/prisma';
 
 export async function getServerSideProps(context) {
@@ -64,15 +65,41 @@ export async function getServerSideProps(context) {
 export default function Transactions({ user, transactions, categories, accounts }) {
   const { data: session, status } = useSession({ required: true });
   const router = useRouter();
+  const [show, setShow] = useState(false);
+  const [message, setMessage] = useState('');
+  const [alertType, setAlertType] = useState('');
+  const timer = () => {
+    const time = setTimeout(() => {
+      setShow(false);
+      setMessage('');
+    }, 5000);
+    return () => {
+      clearTimeout(time);
+    };
+  };
+
   if (status == 'authenticated') {
     const date = new Date();
 
     const getHistory = (e) => {
       e.preventDefault();
       const sendMonth = date.getMonth() - 1;
-      Router.push('/tabs/transactions/[month]', `/tabs/transactions/${sendMonth}`);
+      Router.push(
+        '/tabs/transactions/[month]',
+        `/tabs/transactions/${sendMonth}`
+      );
     };
-    
+
+    if (router.query.message) {
+      if (router.query.message != message) {
+        setMessage(router.query.message);
+        setAlertType(router.query.messageType);
+        setShow(true);
+        timer();
+        router.replace('/tabs/transactions', undefined, { shallow: true });
+      }
+    };
+
     return (
       <>
         <Head>
@@ -80,10 +107,11 @@ export default function Transactions({ user, transactions, categories, accounts 
         </Head>
         <InternalNavBar user={user}>
           <main>
-            {router.query?.message ? (
+            {show ? (
               <Alert
-                message={router.query.message}
-                alertType={router.query.messageType}
+                message={message}
+                alertType={alertType}
+                handleClose={() => setShow(false)}
               />
             ) : (
               ''

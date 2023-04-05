@@ -1,6 +1,5 @@
 import Modal from '../modalTemplate';
 import Alert from '../alert';
-import styles from './settings.module.css';
 import Router from 'next/router';
 import { useState } from 'react';
 
@@ -73,7 +72,7 @@ export default function EditCategory({ category, catNames }) {
                 budgets associated with that category
               </p>
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <input
                 type="text"
                 id="name"

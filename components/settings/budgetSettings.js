@@ -147,7 +147,13 @@ export default function BudgetSettings({ recurringBudgets = [], categories = [],
               {recurringBudgets.map((b) => (
                 <tr key={b.id}>
                   <th>{b.category.name}</th>
-                  <td>${b.max.toFixed(2)}</td>
+                  <td>
+                    $
+                    {b.max.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })}
+                  </td>
                   <td>
                     <label
                       htmlFor={'edit-budget' + b.id}

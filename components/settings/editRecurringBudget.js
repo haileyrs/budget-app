@@ -1,6 +1,5 @@
 import Modal from '../modalTemplate';
 import Alert from '../alert';
-import styles from './settings.module.css';
 import Router from 'next/router';
 import { useState } from 'react';
 
@@ -70,7 +69,7 @@ export default function EditRecurringBudget({ budget }) {
                 month.
               </p>
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <select
                 className="select select-primary w-full max-w-xs"
                 disabled
@@ -78,15 +77,18 @@ export default function EditRecurringBudget({ budget }) {
                 <option>{budget.category.name}</option>
               </select>
             </div>
-            <div className={styles.dollar}>
+            <div className="dollar-sign">
               <p>$</p>
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <input
                 type="text"
                 id="max"
                 name="max"
-                placeholder={budget.max.toFixed(2)}
+                placeholder={budget.max.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}
                 className="input input-bordered input-primary w-full max-w-xs"
                 required
               />

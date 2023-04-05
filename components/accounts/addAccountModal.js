@@ -1,5 +1,4 @@
 import Modal from '../modalTemplate';
-import styles from './account.module.css';
 import Router from 'next/router';
 
 export default function AddAccount({ user }) {
@@ -45,7 +44,7 @@ export default function AddAccount({ user }) {
       <Modal title="Add Account" control="add-account-modal">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <input
                 type="text"
                 name="name"
@@ -55,7 +54,7 @@ export default function AddAccount({ user }) {
                 required
               />
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <select
                 id="type"
                 name="type"
@@ -72,10 +71,10 @@ export default function AddAccount({ user }) {
                 <option>Loan</option>
               </select>
             </div>
-            <div className={styles.dollar}>
+            <div className="dollar-sign">
               <p>$</p>
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <input
                 type="text"
                 id="amount"

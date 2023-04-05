@@ -1,6 +1,5 @@
 import Modal from '../modalTemplate';
 import Alert from '../alert';
-import styles from './transaction.module.css';
 import { useState } from 'react';
 import Router from 'next/router';
 import DatePicker from 'tailwind-datepicker-react';
@@ -133,7 +132,7 @@ export default function EditTransaction({
         )}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <select
                 id="account"
                 name="account"
@@ -145,7 +144,7 @@ export default function EditTransaction({
                 ))}
               </select>
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <select
                 id="category"
                 name="category"
@@ -157,19 +156,22 @@ export default function EditTransaction({
                 ))}
               </select>
             </div>
-            <div className={styles.dollar}>
+            <div className="dollar-sign">
               <p>$</p>
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <input
                 type="text"
                 id="amount"
                 name="amount"
-                placeholder={amount.toFixed(2)}
+                placeholder={amount.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}
                 className="input input-bordered input-primary w-full max-w-xs"
               />
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <input
                 type="text"
                 id="vendor"
@@ -178,7 +180,7 @@ export default function EditTransaction({
                 className="input input-bordered input-primary w-full max-w-xs"
               />
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <DatePicker
                 show={showDate}
                 setShow={(state) => setShowDate(state)}

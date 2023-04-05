@@ -9,8 +9,8 @@ export default function AccountWidget({ id, type, name, amount, updatedDate, pla
             <div className="stat-title">{name}</div>
             <div className="stat-value">
               {negative
-                ? '-$' + (amount *= -1).toFixed(2)
-                : '$' + amount.toFixed(2)}
+                ? '-$' + (amount *= -1).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+                : '$' + amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
             </div>
             <div className="stat-desc">Last Updated: {updatedDate}</div>
           </div>

@@ -1,5 +1,4 @@
 import Modal from '../modalTemplate';
-import styles from './transaction.module.css';
 import { useState } from 'react';
 import Router from 'next/router';
 import DatePicker from 'tailwind-datepicker-react';
@@ -59,7 +58,7 @@ export default function AddTransaction({ user, categories, accounts }) {
       <Modal title="Add Transaction" control="add-transaction-modal">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <select
                 id="account"
                 name="account"
@@ -73,7 +72,7 @@ export default function AddTransaction({ user, categories, accounts }) {
                 ))}
               </select>
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <select
                 id="category"
                 name="category"
@@ -87,10 +86,10 @@ export default function AddTransaction({ user, categories, accounts }) {
                 ))}
               </select>
             </div>
-            <div className={styles.dollar}>
+            <div className="dollar-sign">
               <p>$</p>
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <input
                 type="text"
                 id="amount"
@@ -100,7 +99,7 @@ export default function AddTransaction({ user, categories, accounts }) {
                 required
               />
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <input
                 type="text"
                 id="vendor"
@@ -110,7 +109,7 @@ export default function AddTransaction({ user, categories, accounts }) {
                 required
               />
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <DatePicker
                 show={showDate}
                 setShow={(state) => setShowDate(state)}

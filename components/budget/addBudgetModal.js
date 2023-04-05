@@ -1,5 +1,4 @@
 import Modal from '../modalTemplate';
-import styles from './budget.module.css';
 import Router from 'next/router';
 
 export default function AddBudget({ user, categories }) {
@@ -42,7 +41,7 @@ export default function AddBudget({ user, categories }) {
       <Modal title="Add Budget" control="add-budget-modal">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-4">
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <select
                 id="category"
                 name="category"
@@ -56,10 +55,10 @@ export default function AddBudget({ user, categories }) {
                 ))}
               </select>
             </div>
-            <div className={styles.dollar}>
+            <div className="dollar-sign">
               <h2>$</h2>
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <input
                 type="text"
                 id="max"

@@ -8,17 +8,3 @@
 .topdiv > div {
   align-items: center;
 }
-.inputdiv {
-  grid-column: span 2 / span 2;
-  grid-column-start: 2;
-  padding: 6px;
-}
-.dollar {
-  grid-column: span 1 / span 1;
-  grid-column-start: 1;
-  display: flex;
-  justify-self: end;
-  align-self: center;
-  font-size: large;
-  font-weight: 600;
-}

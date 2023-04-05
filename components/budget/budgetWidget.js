@@ -16,7 +16,16 @@ export default function BudgetWidget({ id, name, value, max, user }) {
             </div>
             <div className="flex prose">
               <p>
-                ${value.toFixed(2)} of ${max.toFixed(2)}
+                $
+                {value.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}{' '}
+                of $
+                {max.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}
               </p>
             </div>
           </div>
@@ -28,7 +37,14 @@ export default function BudgetWidget({ id, name, value, max, user }) {
           ></progress>
           <div className={styles.topdiv}>
             <div className="flex prose">
-              <p>${remaining.toFixed(2)} Left </p>
+              <p>
+                $
+                {remaining.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}{' '}
+                Left
+              </p>
             </div>
             <div className="flex">
               <label htmlFor={id} className="btn btn-sm btn-primary">

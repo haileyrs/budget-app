@@ -1,6 +1,5 @@
 import Modal from '../modalTemplate';
 import Alert from '../alert';
-import styles from './settings.module.css';
 import Router from 'next/router';
 import { useState } from 'react';
 
@@ -125,7 +124,7 @@ export default function DeleteCategory({ category, allCategories }) {
                 Associations'
               </p>
             </div>
-            <div className={styles.inputdiv}>
+            <div className="input-div">
               <select
                 id="category"
                 name="category"

@@ -43,7 +43,12 @@ export default function TransactionTable({
                   <tr key={t.id}>
                     <th>{toDate(t.date)}</th>
                     <td>{t.category.name}</td>
-                    <td>{t.amount.toFixed(2)}</td>
+                    <td>
+                      {t.amount.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                      })}
+                    </td>
                     <td>{t.moneyAccount.name}</td>
                     <td>{t.vendor}</td>
                     {edit ? (

@@ -1,6 +1,11 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Purpose
+
+This project was inspired by my want for a more customizable financial data tracking application, and also as a way for me to learn React. I originally tracked my finances in a google spreadsheet, but spreadsheets don't have enough structure. Other budgeting apps out there are nice because they work with Plaid and automatically fill in your info, but splitting or hiding transactions is complex and inter-account transfers appear as transactions, which does not reflect how much is actually spent in a month. With this app, you can add accounts and update them manually. Transactions are all manual input and not touched by Plaid. Budgets are calculated by month in the application based on transactions you enter.
+
 
 ## Getting Started
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 First, run the development server:
 
@@ -14,22 +19,19 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Deploy on Vercel
+#### Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-## Purpose
-
-This project was inspired by my want for a more customizable financial data tracking application, and also as a way for me to learn React. I originally tracked my finances in a google spreadsheet, but spreadsheets don't have enough structure. Other budgeting apps out there are nice because they work with Plaid and automatically fill in your info, but splitting or hiding transactions is complex and inter-account transfers appear as transactions, which does not reflect how much is actually spent in a month. With this app*, accounts will update automatically via Plaid, but* you can also add accounts and update them manually. Transactions are all manual input and not touched by Plaid. Budgets are calculated by month in the application based on transactions you enter.
 
 ## Notes
 
 #### Auth Providers
 This app uses NextAuth for account management. By default, it is configured to work with Google and GitHub auth. You can add other providers following the directions in the [NextAuth documentation here](https://next-auth.js.org/getting-started/example).
 
-#### Categories
+#### Category Modifications 
 The 'Income' category type by default is the only value that will be displayed as a positive number in the transaction history, all others will be converted to negative value automatically if not entered as so. This type will also not show up in the categories dropdown on the add budget modal. 
 
 If you would like to add categories to track positive cash flow in more detail, there are three places you must update the code in order to make it work for you:
